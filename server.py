@@ -58,7 +58,7 @@ def save_pedido():
 if __name__ == '__main__':
     print("=" * 55)
     print("  Portal de Pedidos — Arca Continental")
-    print("  Servidor: http://localhost:5001")
+    print("  Servidor: http://localhost:5000")
     print("=" * 55)
     port = int(os.environ.get('PORT', 5000))
-app.run(host='0.0.0.0', port=port, use_reloader=False)
+    app.run(host='0.0.0.0', port=port, use_reloader=False)

@@ -1,40 +1,22 @@
 from flask import Flask, jsonify, send_from_directory, request
 from flask_cors import CORS
 import os
+import requests
 from datetime import datetime
 
 app = Flask(__name__, static_folder='.')
 CORS(app)
 
-def get_db():
-    import psycopg2
-    return psycopg2.connect(os.environ.get('DATABASE_URL'))
+AIRTABLE_TOKEN = os.environ.get('AIRTABLE_TOKEN')
+AIRTABLE_BASE  = os.environ.get('AIRTABLE_BASE', 'appy63hUSxVKfo3Ex')
+AIRTABLE_TABLE = os.environ.get('AIRTABLE_TABLE', 'tblmf4G0OHyxAOady')
+AIRTABLE_URL   = f'https://api.airtable.com/v0/{AIRTABLE_BASE}/{AIRTABLE_TABLE}'
 
-def init_db():
-    try:
-        conn = get_db()
-        cur = conn.cursor()
-        cur.execute('''
-            CREATE TABLE IF NOT EXISTS pedidos (
-                id_pedido TEXT,
-                fecha TEXT,
-                status TEXT,
-                cliente TEXT,
-                nombre_contacto TEXT,
-                correo TEXT,
-                telefono TEXT,
-                sku TEXT,
-                nombre_producto TEXT,
-                cantidad INTEGER,
-                direccion TEXT,
-                cp TEXT
-            )
-        ''')
-        conn.commit()
-        cur.close()
-        conn.close()
-    except Exception as e:
-        print(f"Error init_db: {e}")
+def airtable_headers():
+    return {
+        'Authorization': f'Bearer {AIRTABLE_TOKEN}',
+        'Content-Type': 'application/json'
+    }
 
 @app.route('/')
 def index():
@@ -55,27 +37,37 @@ def save_pedido():
         id_pedido = f"PED-{datetime.now().strftime('%Y%m%d%H%M%S')}"
         fecha_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        conn = get_db()
-        cur  = conn.cursor()
-        for item in items:
-            cur.execute('''
-                INSERT INTO pedidos VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-            ''', (
-                id_pedido, fecha_now, 'Registrado',
-                cliente, contacto, correo, telefono,
-                item.get('sku', ''), item.get('nombre', ''), item.get('cantidad', 1),
-                direccion, cp
-            ))
-        conn.commit()
-        cur.close()
-        conn.close()
+        records = []
+        for i, item in enumerate(items):
+            records.append({
+                'fields': {
+                    'ID Pedido':  id_pedido,
+                    'Fecha':      fecha_now,
+                    'Cliente':    cliente,
+                    'Contacto':   contacto,
+                    'Correo':     correo,
+                    'Telefono':   telefono,
+                    'CP':         cp,
+                    'Direccion':  direccion,
+                    'ID Linea':   f"{id_pedido}-{i+1}",
+                    'SKU':        item.get('sku', ''),
+                    'Producto':   item.get('nombre', ''),
+                    'Cantidad':   str(item.get('cantidad', 1))
+                }
+            })
+
+        # Airtable permite max 10 records por request
+        for i in range(0, len(records), 10):
+            batch = records[i:i+10]
+            resp = requests.post(AIRTABLE_URL, json={'records': batch}, headers=airtable_headers())
+            if resp.status_code not in (200, 201):
+                return jsonify({'success': False, 'error': resp.text}), 500
 
         return jsonify({'success': True, 'id_pedido': id_pedido, 'total_items': len(items)})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
 if __name__ == '__main__':
-    init_db()
     print("=" * 55)
     print("  Portal de Pedidos — Arca Continental")
     print("  Servidor: http://localhost:5000")

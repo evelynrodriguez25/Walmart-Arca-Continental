@@ -1,0 +1,8 @@
+id_pedido,fecha,status,cliente,nombre_contacto,correo,telefono,sku,nombre_producto,cantidad,direccion,cp
+PED-20260606204437,2026-06-06 20:44:37,Registrado,fime,evelyn rodriguez,evelyn.rodriguezpn@uanl.edu.mx,8125797730,3.31065E+17,Del Valle Néctar Manzana,1,Armenia 809,66059
+PED-20260606204437,2026-06-06 20:44:37,Registrado,fime,evelyn rodriguez,evelyn.rodriguezpn@uanl.edu.mx,8125797730,4.17585E+18,Del Valle Manzana,1,Armenia 809,66059
+PED-20260606204437,2026-06-06 20:44:37,Registrado,fime,evelyn rodriguez,evelyn.rodriguezpn@uanl.edu.mx,8125797730,6.88293E+18,En Coca Cola Original 12UN 2L,1,Armenia 809,66059
+PED-20260606204437,2026-06-06 20:44:37,Registrado,fime,evelyn rodriguez,evelyn.rodriguezpn@uanl.edu.mx,8125797730,2.68188E+18,Topo Chico Sangría,1,Armenia 809,66059
+PED-20260606210325,2026-06-06 21:03:25,Registrado,fime,evelyn rodriguez,evelyn.rodriguezpn@uanl.edu.mx,8125797730,4.17585E+18,Del Valle Manzana,1,Armenia 809,66059
+PED-20260606210325,2026-06-06 21:03:25,Registrado,fime,evelyn rodriguez,evelyn.rodriguezpn@uanl.edu.mx,8125797730,2.37319E+18,Coca - Cola Zero,1,Armenia 809,66059
+PED-20260606210713,2026-06-06 21:07:13,Registrado,oiubgiugbiu,khhbkhbkh,blablablablebleble@blublublu.com,8241000683,3.31065E+17,Del Valle Néctar Manzana,1,asljsdnak<jfcbal,65230

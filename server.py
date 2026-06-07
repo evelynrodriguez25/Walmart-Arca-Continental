@@ -38,7 +38,7 @@ def save_pedido():
         fecha_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         records = []
-        for i, item in enumerate(items):
+        for item in items:
             records.append({
                 'fields': {
                     'ID Pedido':  id_pedido,
@@ -49,7 +49,6 @@ def save_pedido():
                     'Telefono':   telefono,
                     'CP':         cp,
                     'Direccion':  direccion,
-                    'ID Linea':   f"{id_pedido}-{i+1}",
                     'SKU':        item.get('sku', ''),
                     'Producto':   item.get('nombre', ''),
                     'Cantidad':   str(item.get('cantidad', 1))

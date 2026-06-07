@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal de Pedidos — Walmart × Arca Continental</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --blue:        #0071CE;
+      --blue-dark:   #005FA3;
+      --blue-light:  #E8F4FF;
+      --blue-mid:    #1A8FE3;
+      --yellow:      #FFC220;
+      --yellow-dark: #E6A800;
+      --yellow-light:#FFF8E1;
+      --white:       #FFFFFF;
+      --bg:          #F0F4F8;
+      --bg-card:     #FFFFFF;
+      --bg-header:   #0071CE;
+      --border:      #DDE3EC;
+      --border-blue: rgba(0,113,206,0.25);
+      --text:        #1A2332;
+      --text2:       #5A6478;
+      --text3:       #9AA3B0;
+      --green:       #00A651;
+      --red:         #E3001B;
+      --shadow:      0 2px 12px rgba(0,113,206,0.10);
+      --shadow-lg:   0 8px 32px rgba(0,113,206,0.15);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--blue);
+      padding: 0 32px;
+      height: 62px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 3px 16px rgba(0,0,0,0.18);
+      position: sticky; top: 0; z-index: 200;
+    }
+    .hdr-left { display: flex; align-items: center; gap: 20px; }
+    .spark {
+      background: var(--yellow);
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 900; color: var(--blue);
+    }
+    .brand {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900; font-size: 18px; color: #fff;
+      letter-spacing: 0.3px;
+    }
+    .brand span { color: var(--yellow); }
+    .sep { width: 1px; height: 28px; background: rgba(255,255,255,0.2); }
+    .sub-brand {
+      font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.75);
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .hdr-right { display: flex; align-items: center; gap: 12px; }
+    .date-chip {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px; padding: 4px 14px;
+      font-size: 12px; font-weight: 600; color: #fff;
+    }
+    .cart-btn {
+      background: var(--yellow); border: none; border-radius: 9px;
+      padding: 8px 18px; color: var(--blue);
+      font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;
+      cursor: pointer; display: flex; align-items: center; gap: 8px;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .cart-btn:hover { background: var(--yellow-dark); transform: translateY(-1px); }
+    .cart-count {
+      background: var(--blue); color: #fff;
+      border-radius: 50%; width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: grid; grid-template-columns: 1fr 380px;
+      gap: 24px; max-width: 1380px; margin: 0 auto;
+      padding: 28px 24px 60px;
+    }
+
+    /* ── PAGE TITLE ── */
+    .page-title { margin-bottom: 20px; }
+    .page-title h1 {
+      font-family: 'Nunito', sans-serif; font-weight: 900;
+      font-size: 28px; color: var(--text);
+    }
+    .page-title h1 em { font-style: normal; color: var(--blue); }
+    .page-title p { color: var(--text2); font-size: 13px; margin-top: 3px; }
+
+    /* ── SEARCH ── */
+    .search-wrap { position: relative; margin-bottom: 16px; }
+    .search-wrap input {
+      width: 100%; background: var(--white);
+      border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 11px 16px 11px 44px;
+      color: var(--text); font-size: 14px;
+      font-family: 'Nunito Sans', sans-serif; outline: none;
+      transition: border-color 0.2s; box-shadow: var(--shadow);
+    }
+    .search-wrap input:focus { border-color: var(--blue); }
+    .search-wrap input::placeholder { color: var(--text3); }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 16px; }
+
+    /* ── PILLS ── */
+    .pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .pill {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 20px; padding: 5px 14px;
+      font-size: 12px; font-weight: 700; color: var(--text2);
+      cursor: pointer; transition: all 0.15s;
+      font-family: 'Nunito', sans-serif;
+    }
+    .pill:hover { border-color: var(--blue); color: var(--blue); }
+    .pill.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+    /* ── PRODUCT GRID ── */
+    .product-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px;
+    }
+    .product-card {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+      cursor: pointer; transition: all 0.2s;
+      box-shadow: var(--shadow);
+      animation: fadeUp 0.3s ease both;
+    }
+    .product-card:hover { border-color: var(--blue); box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+    .product-card.in-cart { border-color: var(--blue); background: var(--blue-light); }
+    .product-icon {
+      width: 46px; height: 46px; border-radius: 10px;
+      background: var(--yellow-light); display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+    .product-card.in-cart .product-icon { background: rgba(0,113,206,0.1); }
+    .product-name {
+      font-size: 13px; font-weight: 600; line-height: 1.35; color: var(--text); flex: 1;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .product-sku { font-size: 10px; color: var(--text3); font-family: monospace; }
+    .add-btn {
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 7px 12px; color: var(--text2);
+      font-size: 12px; font-weight: 700; font-family: 'Nunito', sans-serif;
+      cursor: pointer; transition: all 0.15s; text-align: center;
+    }
+    .add-btn:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .add-btn.added { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+    /* ── CART PANEL ── */
+    .cart-panel {
+      position: sticky; top: 82px; height: fit-content;
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-lg);
+    }
+    .cart-header {
+      background: var(--blue); padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .cart-title {
+      font-family: 'Nunito', sans-serif; font-weight: 900;
+      font-size: 15px; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .cart-badge {
+      background: var(--yellow); color: var(--blue);
+      border-radius: 20px; padding: 2px 10px;
+      font-size: 11px; font-weight: 800;
+    }
+
+    /* ── CLIENT ── */
+    .client-section { padding: 14px 20px; border-bottom: 1.5px solid var(--border); }
+    .field-label {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text2); margin-bottom: 6px;
+    }
+    .client-input {
+      width: 100%; background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 8px 12px; color: var(--text);
+      font-size: 13px; font-family: 'Nunito Sans', sans-serif; outline: none;
+      transition: border-color 0.2s;
+    }
+    .client-input:focus { border-color: var(--blue); background: #fff; }
+    .client-input::placeholder { color: var(--text3); }
+
+    /* ── CART ITEMS ── */
+    .cart-items { max-height: 320px; overflow-y: auto; }
+    .cart-items::-webkit-scrollbar { width: 4px; }
+    .cart-items::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .cart-empty { padding: 32px 20px; text-align: center; color: var(--text3); font-size: 13px; }
+    .cart-empty .empty-icon { font-size: 36px; margin-bottom: 8px; }
+    .cart-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 20px; border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.2s ease both;
+    }
+    .cart-item:last-child { border-bottom: none; }
+    .ci-name {
+      flex: 1; font-size: 12px; font-weight: 600; line-height: 1.3; color: var(--text);
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .ci-qty { display: flex; align-items: center; gap: 5px; }
+    .qty-btn {
+      width: 26px; height: 26px; border-radius: 7px;
+      background: var(--bg); border: 1.5px solid var(--border);
+      color: var(--blue); font-size: 16px; font-weight: 800;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s; line-height: 1;
+    }
+    .qty-btn:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .qty-num {
+      min-width: 28px; text-align: center;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 15px; color: var(--blue);
+    }
+    .remove-btn {
+      background: none; border: none; color: var(--text3);
+      cursor: pointer; font-size: 15px; padding: 2px;
+      transition: color 0.15s;
+    }
+    .remove-btn:hover { color: var(--red); }
+
+    /* ── CART FOOTER ── */
+    .cart-footer { padding: 16px 20px; border-top: 1.5px solid var(--border); background: var(--bg); }
+    .summary-row {
+      display: flex; justify-content: space-between;
+      font-size: 12px; color: var(--text2); margin-bottom: 5px;
+      font-weight: 600;
+    }
+    .summary-row.total {
+      font-size: 14px; font-weight: 800; color: var(--blue);
+      padding-top: 8px; border-top: 1.5px solid var(--border); margin-top: 6px; margin-bottom: 14px;
+    }
+    .confirm-btn {
+      width: 100%; background: var(--yellow); border: none; border-radius: 10px;
+      padding: 13px; color: var(--blue);
+      font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      cursor: pointer; transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 3px 10px rgba(255,194,32,0.4);
+    }
+    .confirm-btn:hover:not(:disabled) { background: var(--yellow-dark); transform: translateY(-1px); }
+    .confirm-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,30,60,0.6);
+      backdrop-filter: blur(6px); z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .modal-overlay.show { opacity: 1; pointer-events: all; }
+    .modal {
+      background: #fff; border-radius: 20px; padding: 40px 36px;
+      max-width: 420px; width: 90%; text-align: center;
+      transform: scale(0.9); transition: transform 0.3s;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+    }
+    .modal-overlay.show .modal { transform: scale(1); }
+    .modal-icon { font-size: 56px; margin-bottom: 14px; }
+    .modal-title {
+      font-family: 'Nunito', sans-serif; font-weight: 900;
+      font-size: 24px; color: var(--blue); margin-bottom: 6px;
+    }
+    .modal-id {
+      background: var(--yellow-light); border: 2px solid var(--yellow);
+      color: var(--blue); border-radius: 10px; padding: 10px 18px;
+      font-family: monospace; font-size: 13px; font-weight: 800;
+      display: inline-block; margin: 10px 0;
+    }
+    .modal-datetime {
+      background: var(--blue-light); border: 1.5px solid var(--border-blue);
+      color: var(--blue); border-radius: 8px; padding: 6px 14px;
+      font-size: 13px; font-weight: 700; display: inline-block; margin-bottom: 8px;
+    }
+    .modal-sub { color: var(--text2); font-size: 13px; margin-bottom: 22px; }
+    .modal-close {
+      background: var(--blue); border: none; border-radius: 10px;
+      padding: 12px 32px; color: #fff;
+      font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+      text-transform: uppercase; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .modal-close:hover { background: var(--blue-dark); }
+
+    /* ── MODAL DATOS ── */
+    #datosOverlay {
+      position: fixed; inset: 0; background: rgba(0,30,60,0.6);
+      backdrop-filter: blur(6px); z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      padding: 20px;
+    }
+    #datosOverlay.show { opacity: 1; pointer-events: all; }
+    .datos-modal {
+      background: #fff; border-radius: 20px; padding: 36px 32px;
+      max-width: 480px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
+      transform: scale(0.9); transition: transform 0.3s;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+    }
+    #datosOverlay.show .datos-modal { transform: scale(1); }
+    .datos-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 6px;
+    }
+    .datos-icon {
+      width: 44px; height: 44px; background: var(--yellow-light);
+      border-radius: 12px; display: flex; align-items: center;
+      justify-content: center; font-size: 22px;
+    }
+    .datos-title {
+      font-family: 'Nunito', sans-serif; font-weight: 900;
+      font-size: 20px; color: var(--text);
+    }
+    .datos-sub {
+      font-size: 12px; color: var(--text3); margin-bottom: 22px;
+      padding-left: 56px; margin-top: 2px;
+    }
+    .datos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .datos-field { display: flex; flex-direction: column; gap: 5px; }
+    .datos-field.full { grid-column: 1 / -1; }
+    .datos-label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text2);
+    }
+    .datos-input {
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 9px; padding: 10px 13px; color: var(--text);
+      font-size: 13px; font-family: 'Nunito Sans', sans-serif;
+      outline: none; transition: border-color 0.2s, background 0.2s;
+    }
+    .datos-input:focus { border-color: var(--blue); background: #fff; }
+    .datos-input::placeholder { color: var(--text3); }
+    .datos-input.error { border-color: var(--red); background: #fff5f5; }
+    .datos-btns { display: flex; gap: 10px; margin-top: 20px; }
+    .datos-cancel {
+      flex: 1; background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 12px; color: var(--text2);
+      font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .datos-cancel:hover { border-color: var(--text2); color: var(--text); }
+    .datos-submit {
+      flex: 2; background: var(--yellow); border: none;
+      border-radius: 10px; padding: 12px; color: var(--blue);
+      font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      cursor: pointer; transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 3px 10px rgba(255,194,32,0.4);
+    }
+    .datos-submit:hover { background: var(--yellow-dark); transform: translateY(-1px); }
+
+    /* ── NAV TABS ── */
+    .nav-tabs {
+      display: flex; align-items: center; gap: 4px;
+      margin-right: 8px;
+    }
+    .nav-tab {
+      background: rgba(255,255,255,0.12); border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 8px; padding: 6px 16px;
+      font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800;
+      color: rgba(255,255,255,0.75); cursor: pointer;
+      transition: all 0.15s; letter-spacing: 0.3px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nav-tab:hover { background: rgba(255,255,255,0.2); color: #fff; }
+    .nav-tab.active { background: #fff; color: var(--blue); border-color: #fff; }
+    .nav-tab .tab-badge {
+      background: var(--yellow); color: var(--blue);
+      border-radius: 10px; padding: 1px 7px; font-size: 10px; font-weight: 900;
+      display: none;
+    }
+    .nav-tab .tab-badge.show { display: inline-block; }
+
+    /* ── PEDIDOS VIEW ── */
+    #pedidosView { display: none; max-width: 1380px; margin: 0 auto; padding: 28px 24px 60px; }
+    #pedidosView.active { display: block; }
+    #catalogView { display: block; }
+    #catalogView.hidden { display: none; }
+
+    .pedidos-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
+    }
+    .pedidos-search {
+      position: relative; flex: 1; min-width: 200px; max-width: 360px;
+    }
+    .pedidos-search input {
+      width: 100%; background: #fff; border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 9px 14px 9px 40px;
+      font-size: 13px; font-family: 'Nunito Sans', sans-serif;
+      color: var(--text); outline: none; transition: border-color 0.2s;
+      box-shadow: var(--shadow);
+    }
+    .pedidos-search input:focus { border-color: var(--blue); }
+    .pedidos-search input::placeholder { color: var(--text3); }
+    .pedidos-search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; }
+
+    /* Pedido card expandible */
+    .pedido-card {
+      background: #fff; border: 1.5px solid var(--border);
+      border-radius: 14px; margin-bottom: 14px;
+      box-shadow: var(--shadow); overflow: hidden;
+      animation: fadeUp 0.3s ease both;
+    }
+    .pedido-card-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .pedido-card-header:hover { background: var(--bg); }
+    .pedido-status-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--green); flex-shrink: 0;
+      box-shadow: 0 0 0 3px rgba(0,166,81,0.15);
+    }
+    .pedido-id-badge {
+      background: var(--blue-light); color: var(--blue);
+      border-radius: 7px; padding: 4px 10px;
+      font-family: monospace; font-size: 12px; font-weight: 800;
+      flex-shrink: 0;
+    }
+    .pedido-meta { flex: 1; }
+    .pedido-meta-nombre {
+      font-weight: 700; font-size: 14px; color: var(--text);
+    }
+    .pedido-meta-sub {
+      font-size: 11px; color: var(--text3); margin-top: 2px;
+    }
+    .pedido-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pedido-chip {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 20px; padding: 3px 10px;
+      font-size: 11px; font-weight: 700; color: var(--text2);
+    }
+    .pedido-chip.green { background: #E8F9F0; border-color: #A3DFC0; color: var(--green); }
+    .pedido-expand-arrow {
+      font-size: 12px; color: var(--text3);
+      transition: transform 0.2s; flex-shrink: 0;
+    }
+    .pedido-card.expanded .pedido-expand-arrow { transform: rotate(180deg); }
+
+    .pedido-card-body {
+      display: none; padding: 0 20px 20px;
+      border-top: 1.5px solid var(--border);
+    }
+    .pedido-card.expanded .pedido-card-body { display: block; }
+
+    .pedido-section-title {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text2);
+      margin: 16px 0 8px;
+    }
+    .pedido-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 12px; border: 1.5px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+    }
+    .pedido-table thead tr { background: var(--bg); }
+    .pedido-table th {
+      padding: 8px 12px; text-align: left;
+      font-weight: 800; color: var(--text2);
+      border-bottom: 1.5px solid var(--border);
+    }
+    .pedido-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    .pedido-table tr:last-child td { border-bottom: none; }
+    .pedido-table tr:nth-child(even) td { background: var(--bg); }
+
+    .pedido-info-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px;
+    }
+    .pedido-info-box {
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .pedido-info-row {
+      display: flex; gap: 6px; font-size: 12px; margin-bottom: 5px;
+    }
+    .pedido-info-row:last-child { margin-bottom: 0; }
+    .pedido-info-label { color: var(--text3); flex-shrink: 0; }
+    .pedido-info-val { font-weight: 700; color: var(--text); }
+
+    .empty-pedidos {
+      text-align: center; padding: 80px 20px; color: var(--text3);
+    }
+    .empty-pedidos-icon { font-size: 52px; margin-bottom: 14px; }
+    .empty-pedidos h3 {
+      font-family: 'Nunito', sans-serif; font-weight: 800;
+      font-size: 18px; color: var(--text2); margin-bottom: 6px;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .layout { grid-template-columns: 1fr; }
+      .cart-panel { position: static; }
+    }
+
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="hdr-left">
+    <div class="spark">✦</div>
+    <div class="brand">Walmart <span>×</span> Arca Continental</div>
+    <div class="sep"></div>
+    <div class="sub-brand">Portal de Pedidos</div>
+  </div>
+  <div class="hdr-right">
+    <div class="date-chip" id="headerDate">—</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tabCatalogo" onclick="switchTab('catalogo')">🛍️ Catálogo</button>
+      <button class="nav-tab" id="tabPedidos" onclick="switchTab('pedidos')">
+        📋 Mis Pedidos
+        <span class="tab-badge" id="pedidosBadge">0</span>
+      </button>
+    </div>
+    <button class="cart-btn" onclick="scrollToCart()">
+      🛒 Carrito
+      <span class="cart-count" id="cartCountHeader">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- CATALOG VIEW -->
+<div id="catalogView">
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- LEFT: CATALOG -->
+  <div>
+    <div class="page-title">
+      <h1>Realizar <em>Pedido</em></h1>
+      <p>FRENTE A — Selecciona productos y confirma tu pedido</p>
+    </div>
+
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar producto…" oninput="renderProducts()"/>
+    </div>
+
+    <div class="pills" id="pillsContainer"></div>
+    <div class="product-grid" id="productGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:56px;color:var(--text3)">
+        <div style="width:30px;height:30px;border:3px solid rgba(0,113,206,0.2);border-top-color:var(--blue);border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 12px"></div>
+        Cargando productos…
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: CART -->
+  <div id="cartPanel" class="cart-panel">
+    <div class="cart-header">
+      <span class="cart-title">🛒 Mi Pedido</span>
+      <span class="cart-badge" id="cartBadge">0 productos</span>
+    </div>
+
+    <div class="client-section">
+      <div class="field-label">Cliente</div>
+      <input class="client-input" id="clienteInput" type="text" placeholder="Ej: Walmart Cumbres"/>
+    </div>
+
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">
+        <div class="empty-icon">📦</div>
+        Agrega productos al pedido
+      </div>
+    </div>
+
+    <div class="cart-footer">
+      <div class="summary-row"><span>Productos distintos</span><span id="sumProductos">0</span></div>
+      <div class="summary-row"><span>Unidades totales</span><span id="sumUnidades">0</span></div>
+      <div class="summary-row total"><span>Total líneas</span><span id="sumLineas">0</span></div>
+      <button class="confirm-btn" id="confirmBtn" onclick="confirmarPedido()" disabled>
+        ✦ Confirmar Pedido
+      </button>
+    </div>
+  </div>
+
+</div><!-- /layout -->
+</div><!-- /catalogView -->
+
+<!-- PEDIDOS VIEW -->
+<div id="pedidosView">
+  <div class="page-title" style="margin-bottom:20px;">
+    <h1>Mis <em>Pedidos</em></h1>
+    <p>Historial de pedidos registrados en esta sesión</p>
+  </div>
+
+  <div class="pedidos-toolbar">
+    <div class="pedidos-search">
+      <span class="pedidos-search-icon">🔍</span>
+      <input type="text" id="pedidosSearch" placeholder="Buscar por ID, nombre, producto…" oninput="renderPedidos()"/>
+    </div>
+    <div style="font-size:12px;color:var(--text3);font-weight:600;" id="pedidosCount">0 pedidos</div>
+  </div>
+
+  <div id="pedidosList">
+    <div class="empty-pedidos">
+      <div class="empty-pedidos-icon">📋</div>
+      <h3>Sin pedidos aún</h3>
+      <p>Los pedidos confirmados aparecerán aquí</p>
+    </div>
+  </div>
+</div>
+<div id="datosOverlay">
+  <div class="datos-modal">
+    <div class="datos-header">
+      <div class="datos-icon">📋</div>
+      <div class="datos-title">Datos del pedido</div>
+    </div>
+    <div class="datos-sub">Completa tu información antes de confirmar</div>
+    <div class="datos-grid">
+      <div class="datos-field full">
+        <label class="datos-label">Nombre completo *</label>
+        <input class="datos-input" id="dNombre" type="text" placeholder="Ej: María González"/>
+      </div>
+      <div class="datos-field full">
+        <label class="datos-label">Correo electrónico *</label>
+        <input class="datos-input" id="dCorreo" type="email" placeholder="correo@empresa.com"/>
+      </div>
+      <div class="datos-field">
+        <label class="datos-label">Teléfono *</label>
+        <input class="datos-input" id="dTelefono" type="tel" placeholder="81 1234 5678"/>
+      </div>
+      <div class="datos-field">
+        <label class="datos-label">Código postal *</label>
+        <input class="datos-input" id="dCP" type="text" placeholder="64000" maxlength="5"/>
+      </div>
+      <div class="datos-field full">
+        <label class="datos-label">Dirección *</label>
+        <input class="datos-input" id="dDireccion" type="text" placeholder="Ej: Av. Insurgentes 1234, Col. Centro"/>
+      </div>
+    </div>
+    <div class="datos-btns">
+      <button class="datos-cancel" onclick="closeDatos()">Cancelar</button>
+      <button class="datos-submit" onclick="enviarPedido()">✦ Confirmar Pedido</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMACIÓN / RESUMEN -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" style="max-width:580px;padding:0;overflow:hidden;">
+
+    <!-- Header verde -->
+    <div style="background:var(--green);padding:24px 28px;display:flex;align-items:center;gap:14px;">
+      <div style="font-size:36px;line-height:1;">✅</div>
+      <div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;color:#fff;">¡Pedido Confirmado!</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:2px;" id="modalDatetime">—</div>
+      </div>
+      <div style="margin-left:auto;text-align:right;">
+        <div style="background:rgba(255,255,255,0.2);border-radius:8px;padding:6px 14px;font-family:monospace;font-size:13px;font-weight:800;color:#fff;" id="modalPedidoId">PED-...</div>
+        <div style="margin-top:6px;">
+          <span style="background:#fff;color:var(--green);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:800;font-family:'Nunito',sans-serif;">● Registrado</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:22px 28px;max-height:60vh;overflow-y:auto;">
+
+      <!-- Tabla de productos -->
+      <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px;">🛒 Productos del pedido</div>
+      <div style="border:1.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:18px;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <thead>
+            <tr style="background:var(--bg);">
+              <th style="padding:8px 12px;text-align:left;font-weight:800;color:var(--text2);border-bottom:1.5px solid var(--border);">ID Línea</th>
+              <th style="padding:8px 12px;text-align:left;font-weight:800;color:var(--text2);border-bottom:1.5px solid var(--border);">SKU</th>
+              <th style="padding:8px 12px;text-align:left;font-weight:800;color:var(--text2);border-bottom:1.5px solid var(--border);">Producto</th>
+              <th style="padding:8px 12px;text-align:center;font-weight:800;color:var(--text2);border-bottom:1.5px solid var(--border);">Cant.</th>
+            </tr>
+          </thead>
+          <tbody id="resumenTabla"></tbody>
+        </table>
+      </div>
+
+      <!-- Datos del comprador y envío -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+
+        <div style="border:1.5px solid var(--border);border-radius:10px;padding:14px;">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px;">👤 Comprador</div>
+          <div id="resumenComprador" style="display:flex;flex-direction:column;gap:6px;font-size:12px;"></div>
+        </div>
+
+        <div style="border:1.5px solid var(--border);border-radius:10px;padding:14px;">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px;">📦 Envío</div>
+          <div id="resumenEnvio" style="display:flex;flex-direction:column;gap:6px;font-size:12px;"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div style="padding:16px 28px;border-top:1.5px solid var(--border);background:var(--bg);display:flex;justify-content:flex-end;">
+      <button class="modal-close" onclick="closeModal()">Nuevo Pedido →</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const PRODUCTOS = [{"sku": "7.01655E+18", "nombre": "Del Valle Mango"}, {"sku": "4.17585E+18", "nombre": "Del Valle Manzana"}, {"sku": "3.31065E+17", "nombre": "Del Valle Néctar Manzana"}, {"sku": "2.78689E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "3.90993E+18", "nombre": "En Dasani 6UN 1.2L & Monster 1UN 473ML & Monster Zero 1UN 473ML"}, {"sku": "6.88293E+18", "nombre": "En Coca Cola Original 12UN 2L"}, {"sku": "2.37319E+18", "nombre": "Coca - Cola Zero"}, {"sku": "6.50788E+18", "nombre": "Joya Ponche"}, {"sku": "9.10429E+18", "nombre": "Fresca Toronja"}, {"sku": "9.10955E+18", "nombre": "Sprite Lima Limón"}, {"sku": "2.68188E+18", "nombre": "Topo Chico Sangría"}, {"sku": "2.84446E+18", "nombre": "Monster Energy Original"}, {"sku": "2.45543E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "7.10482E+18", "nombre": "Coca - Cola"}, {"sku": "2.78795E+17", "nombre": "Coca - Cola"}, {"sku": "4.37138E+18", "nombre": "Sprite Lima Limón"}, {"sku": "4.14178E+18", "nombre": "Predator Energy Original"}, {"sku": "1.31232E+18", "nombre": "Sprite Lima Limón"}, {"sku": "5.45836E+17", "nombre": "Santa Clara Leche Fresa"}, {"sku": "3.82464E+18", "nombre": "Santa Clara Leche Vainilla"}, {"sku": "3.44996E+18", "nombre": "Fuze Tea Frutos Rojos"}, {"sku": "6.0816E+18", "nombre": "Powerade Frutas Rojas"}, {"sku": "3.08284E+18", "nombre": "Powerade Moras"}, {"sku": "6.15908E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "2.52057E+18", "nombre": "Coca - Cola"}, {"sku": "3.50075E+18", "nombre": "Fanta Fresa"}, {"sku": "6.26787E+18", "nombre": "Coca - Cola"}, {"sku": "3.34644E+18", "nombre": "Joya Fresa"}, {"sku": "4.27899E+18", "nombre": "En Coca Cola Original 96UN 1L"}, {"sku": "3.05515E+18", "nombre": "En Coca Cola Original 48UN 3L"}, {"sku": "7.51212E+18", "nombre": "Coca - Cola"}, {"sku": "6.1389E+18", "nombre": "Coca - Cola"}, {"sku": "4.12045E+18", "nombre": "Coca - Cola"}, {"sku": "8.10439E+18", "nombre": "Coca - Cola"}, {"sku": "1.60799E+18", "nombre": "Coca - Cola"}, {"sku": "5.94138E+18", "nombre": "Fanta Naranja"}, {"sku": "8.83979E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "2.3171E+18", "nombre": "Fanta Fresa"}, {"sku": "4.80252E+18", "nombre": "Del Valle Durazno"}, {"sku": "5.4284E+18", "nombre": "Ades Frutal Durazno"}, {"sku": "8.79023E+17", "nombre": "Familia Coca - Cola"}, {"sku": "8.51269E+18", "nombre": "Coca - Cola"}, {"sku": "6.41938E+18", "nombre": "Fresca Fusión"}, {"sku": "3.41758E+18", "nombre": "Topo Chico Agua Mineral"}, {"sku": "5.76441E+17", "nombre": "Coca - Cola"}, {"sku": "1.82556E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "6.14633E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "2.55209E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "7.0462E+18", "nombre": "Santa Clara Leche Chocolate"}, {"sku": "2.55568E+18", "nombre": "Ades Frutal Mango"}, {"sku": "8.57108E+18", "nombre": "Pulpy"}, {"sku": "8.6055E+18", "nombre": "Coca - Cola"}, {"sku": "6.83662E+18", "nombre": "Coca - Cola Zero"}, {"sku": "4.98865E+18", "nombre": "Ciel Mineralizada Agua Mineral"}, {"sku": "1.34958E+18", "nombre": "Fresca Toronja"}, {"sku": "1.02467E+18", "nombre": "Santa Clara Leche Entera"}, {"sku": "2.36537E+18", "nombre": "Santa Clara Leche Light Deslactosada"}, {"sku": "1.51614E+18", "nombre": "Del Valle Reserva Arándano"}, {"sku": "8.81455E+18", "nombre": "Fuze Tea Mango Manzanilla"}, {"sku": "3.94617E+18", "nombre": "Fuze Tea Durazno"}, {"sku": "7.50681E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "4.50968E+18", "nombre": "Sprite Lima Limón"}, {"sku": "8.12784E+18", "nombre": "Coca - Cola"}, {"sku": "3.12323E+18", "nombre": "Santa Clara Leche Cappuccino"}, {"sku": "8.05384E+18", "nombre": "Del Valle Mango"}, {"sku": "1.26493E+18", "nombre": "Del Valle Manzana"}, {"sku": "6.6275E+18", "nombre": "Del Valle Durazno"}, {"sku": "6.78613E+18", "nombre": "Frutsi Frutas Rojas"}, {"sku": "2.42185E+18", "nombre": "Del Valle Piña"}, {"sku": "5.86165E+18", "nombre": "Coca - Cola"}, {"sku": "4.09558E+18", "nombre": "Coca-Cola"}, {"sku": "6.84294E+18", "nombre": "Coca-Cola"}, {"sku": "8.24895E+18", "nombre": "Aquarius Pomelo Rosado"}, {"sku": "2.75183E+18", "nombre": "Cepita Fresh Naranja"}, {"sku": "4.7124E+18", "nombre": "Coca - Cola"}, {"sku": "7.93025E+18", "nombre": "Coca - Cola"}, {"sku": "7.55119E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.86089E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.04633E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.34872E+18", "nombre": "Coca - Cola"}, {"sku": "3.1667E+18", "nombre": "Coca - Cola"}, {"sku": "8.24157E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "8.47488E+17", "nombre": "Powerade Fruta Tropical"}, {"sku": "8.32468E+18", "nombre": "Powerade Manzana Clear"}, {"sku": "2.99138E+18", "nombre": "Powerade Mora Azul"}, {"sku": "8.66773E+18", "nombre": "Powerade Manzana Acida"}, {"sku": "5.59568E+18", "nombre": "En Inca Kola 12UN 900ML"}, {"sku": "4.43186E+18", "nombre": "Coca - Cola Light"}, {"sku": "3.34726E+18", "nombre": "Coca - Cola Zero"}, {"sku": "7.70153E+18", "nombre": "Coca - Cola Zero"}, {"sku": "7.4553E+18", "nombre": "Delaware Punch Uva"}, {"sku": "8.34139E+18", "nombre": "Fuze Tea Durazno"}, {"sku": "3.37565E+17", "nombre": "Fanta Naranja"}, {"sku": "5.90957E+18", "nombre": "Fresca Toronja"}, {"sku": "1.77392E+17", "nombre": "Sprite Lima Limón"}, {"sku": "7.82903E+18", "nombre": "Santa Clara Leche Entera"}, {"sku": "3.5831E+18", "nombre": "Flashlyte Fresa"}, {"sku": "1.06568E+18", "nombre": "Flashlyte Sandia"}, {"sku": "1.72927E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.80889E+18", "nombre": "Fresca Fusión"}, {"sku": "1.32513E+17", "nombre": "Valle Frut Citrus Punch"}, {"sku": "6.35733E+17", "nombre": "Frutsi Uva"}, {"sku": "1.04553E+18", "nombre": "Frutsi Manzana"}, {"sku": "2.83799E+18", "nombre": "Coca - Cola Zero"}, {"sku": "4.49152E+18", "nombre": "Powerade Moras"}, {"sku": "8.86617E+18", "nombre": "Fuze Tea Verde Limón"}, {"sku": "8.99837E+18", "nombre": "Fuze Tea Limón"}, {"sku": "4.44541E+18", "nombre": "Fuze Tea Limón"}, {"sku": "3.42678E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "6.23345E+18", "nombre": "Powerade Frutas Rojas"}, {"sku": "8.88296E+18", "nombre": "Powerade Lima Limón"}, {"sku": "4.64131E+17", "nombre": "Ciel Agua Purificada"}, {"sku": "8.14252E+17", "nombre": "Powerade Naranja Mandarina"}, {"sku": "8.36409E+18", "nombre": "Coca - Cola Light"}, {"sku": "7.21185E+18", "nombre": "En Coca Cola Original 3UN 3L"}, {"sku": "5.28653E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "3.12823E+18", "nombre": "Powerade Maracuya"}, {"sku": "1.30032E+17", "nombre": "Coca-Cola Sabor Original"}, {"sku": "3.98342E+18", "nombre": "Dasani Sin Gas"}, {"sku": "3.76995E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "7.69325E+17", "nombre": "Fioravanti Manzana Roja"}, {"sku": "1.06255E+18", "nombre": "Coca-Cola Light"}, {"sku": "2.96584E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "5.63289E+18", "nombre": "Dasani Sin Gas"}, {"sku": "5.94347E+18", "nombre": "Sprite Harmony Lima Limón"}, {"sku": "5.66315E+18", "nombre": "Dasani Sin Gas"}, {"sku": "2.95082E+18", "nombre": "Fanta Naranja"}, {"sku": "2.90341E+17", "nombre": "Dasani Sin Gas"}, {"sku": "2.17033E+18", "nombre": "Fioravanti Fresa"}, {"sku": "2.51385E+18", "nombre": "Inca-Kola Dorada STV"}, {"sku": "8.08407E+18", "nombre": "Powerade Mora Azul"}, {"sku": "7.22724E+18", "nombre": "Powerade Manzana Clear"}, {"sku": "7.72534E+18", "nombre": "Powerade Uva"}, {"sku": "3.04013E+18", "nombre": "Powerade Fruta Tropical"}, {"sku": "8.27521E+18", "nombre": "Del Valle Fresh Naranja"}, {"sku": "6.44696E+18", "nombre": "Fuze Tea Negro Limón"}, {"sku": "6.84016E+18", "nombre": "Powerade Fruta Tropical"}, {"sku": "3.70149E+18", "nombre": "Fuze Tea Negro Limón"}, {"sku": "2.9231E+18", "nombre": "Powerade Manzana Clear"}, {"sku": "4.52153E+18", "nombre": "Fuze Tea Mango Manzanilla"}, {"sku": "8.68347E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "6.66337E+18", "nombre": "Coca - Cola"}, {"sku": "3.12022E+18", "nombre": "Coca - Cola"}, {"sku": "6.92408E+18", "nombre": "Fresca Toronja"}, {"sku": "6.16365E+18", "nombre": "Delaware Punch Uva"}, {"sku": "5.10628E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.66444E+18", "nombre": "Familia Coca - Cola"}, {"sku": "2.67103E+18", "nombre": "Pulpy Naranja"}, {"sku": "4.73924E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "2.40064E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "3.906E+18", "nombre": "Coca - Cola Zero"}, {"sku": "7.02502E+18", "nombre": "Coca - Cola"}, {"sku": "3.85253E+18", "nombre": "Santa Clara Leche Deslactosada Semi"}, {"sku": "6.13073E+18", "nombre": "Santa Clara Leche Cappuccino"}, {"sku": "6.56357E+18", "nombre": "Coca-Cola"}, {"sku": "1.1211E+18", "nombre": "Coca-Cola"}, {"sku": "4.99432E+18", "nombre": "Coca-Cola"}, {"sku": "6.34334E+18", "nombre": "Coca-Cola"}, {"sku": "4.46088E+18", "nombre": "Coca-Cola Zero Cola"}, {"sku": "7.54871E+18", "nombre": "Fanta Naranja"}, {"sku": "5.40597E+17", "nombre": "Sprite Lima-Limón"}, {"sku": "7.64057E+18", "nombre": "Benedictino Agua Mineral"}, {"sku": "1.43109E+18", "nombre": "Benedictino Soda"}, {"sku": "5.10695E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "4.36338E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "6.89774E+18", "nombre": "En Coca Cola Original 18UN 1L"}, {"sku": "6.37529E+18", "nombre": "Dasani Mineralizada Carbonatada"}, {"sku": "5.10023E+18", "nombre": "Fanta Naranja"}, {"sku": "9.18952E+18", "nombre": "Fanta Fresa"}, {"sku": "3.81824E+18", "nombre": "Fanta Naranja"}, {"sku": "7.27907E+18", "nombre": "Fanta Fresa"}, {"sku": "4.00989E+18", "nombre": "Topo Chico Agua Mineral"}, {"sku": "4.63871E+17", "nombre": "Fresca Toronja"}, {"sku": "3.3461E+18", "nombre": "Fanta Naranja"}, {"sku": "7.58525E+18", "nombre": "Topo Chico Twist Limón"}, {"sku": "3.00893E+18", "nombre": "Familia Coca - Cola"}, {"sku": "8.87374E+18", "nombre": "Familia Coca - Cola"}, {"sku": "4.30469E+18", "nombre": "Coca - Cola"}, {"sku": "1.72198E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "4.36123E+18", "nombre": "Sprite Lima Limón"}, {"sku": "2.4274E+17", "nombre": "Fanta Naranja"}, {"sku": "3.99202E+18", "nombre": "Topo Chico Agua Mineral"}, {"sku": "7.70954E+18", "nombre": "Delaware Punch Uva"}, {"sku": "2.40003E+18", "nombre": "PREDATOR ENERGY WILD BERRY"}, {"sku": "6.54487E+18", "nombre": "Del Valle Durazno"}, {"sku": "8.25127E+18", "nombre": "Del Valle Néctar Manzana"}, {"sku": "6.03833E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "2.03021E+18", "nombre": "Sprite Lima Limón"}, {"sku": "7.21892E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "9.90479E+17", "nombre": "Valle Frut Citrus Punch"}, {"sku": "5.04825E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "5.62E+18", "nombre": "Fanta Senzao Guaraná"}, {"sku": "5.3843E+18", "nombre": "Familia Coca - Cola"}, {"sku": "6.15096E+18", "nombre": "Ades Frutal Mango"}, {"sku": "8.96069E+18", "nombre": "Ciel Mineralizada Agua Mineral"}, {"sku": "4.26016E+18", "nombre": "Ciel Mineralizada Agua Mineral"}, {"sku": "1.49364E+18", "nombre": "Fresca Toronja"}, {"sku": "5.22107E+18", "nombre": "Fresca Toronja"}, {"sku": "9.09655E+18", "nombre": "Topo Chico Agua Mineral"}, {"sku": "8.87866E+18", "nombre": "Coca - Cola Zero"}, {"sku": "2.51558E+18", "nombre": "Coca - Cola Zero"}, {"sku": "9.36194E+17", "nombre": "Coca - Cola"}, {"sku": "8.60458E+18", "nombre": "Del Valle Durazno"}, {"sku": "9.14985E+16", "nombre": "Del Valle Mango"}, {"sku": "1.88801E+18", "nombre": "Del Valle Manzana"}, {"sku": "2.09914E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "4.28732E+18", "nombre": "Del Valle Mango"}, {"sku": "7.69347E+18", "nombre": "Powerade Uva"}, {"sku": "2.46623E+17", "nombre": "Valle Frut Citrus Punch"}, {"sku": "5.34929E+18", "nombre": "Del Valle Mango"}, {"sku": "4.57415E+18", "nombre": "Del Valle Néctar Manzana"}, {"sku": "6.34288E+17", "nombre": "Monster Energy Lo Carb"}, {"sku": "8.31267E+18", "nombre": "Monster Energy Mango Loco"}, {"sku": "7.55639E+18", "nombre": "Monster Energy Ultra Peachy Keen"}, {"sku": "3.56009E+18", "nombre": "Predator Energy Purple Rain"}, {"sku": "9.07002E+16", "nombre": "Predator Energy Red Apple"}, {"sku": "8.0766E+18", "nombre": "Ades Frutal Manzana"}, {"sku": "1.28966E+18", "nombre": "Ades Frutal Guanábana"}, {"sku": "8.46749E+18", "nombre": "Ades Frutal Durazno"}, {"sku": "4.24913E+18", "nombre": "Fanta Manzana"}, {"sku": "4.35089E+18", "nombre": "Fanta Limón"}, {"sku": "8.73282E+18", "nombre": "Joya"}, {"sku": "2.33854E+18", "nombre": "Del Valle Durazno"}, {"sku": "1.96768E+18", "nombre": "Del Valle Guayaba"}, {"sku": "8.21421E+18", "nombre": "Del Valle Mango"}, {"sku": "3.94016E+18", "nombre": "Del Valle Durazno"}, {"sku": "4.41338E+18", "nombre": "Joya Piña"}, {"sku": "2.35796E+18", "nombre": "Fresca Toronja"}, {"sku": "1.56163E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "2.03209E+18", "nombre": "Fanta Naranja"}, {"sku": "6.20077E+18", "nombre": "Fanta Naranja"}, {"sku": "5.03985E+18", "nombre": "Sprite Lima Limón"}, {"sku": "5.94114E+18", "nombre": "Coca - Cola Zero"}, {"sku": "3.78544E+18", "nombre": "Del Valle Néctar Manzana"}, {"sku": "4.1788E+18", "nombre": "En Fuze Tea Limón 15UN 550ML"}, {"sku": "5.45242E+18", "nombre": "Coca-Cola Sabor Orginial"}, {"sku": "7.08341E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "2.91843E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "2.05978E+18", "nombre": "Coca - Cola"}, {"sku": "6.52464E+18", "nombre": "Powerade Uva"}, {"sku": "6.61424E+18", "nombre": "Coca - Cola Light"}, {"sku": "1.97993E+18", "nombre": "Coca - Cola Zero"}, {"sku": "1.50606E+18", "nombre": "Familia Coca - Cola"}, {"sku": "9.02622E+18", "nombre": "Fanta Naranja"}, {"sku": "8.58653E+18", "nombre": "Delaware Punch Uva"}, {"sku": "2.74581E+17", "nombre": "Coca - Cola Light"}, {"sku": "7.19535E+18", "nombre": "Coca-Cola Zero Cola"}, {"sku": "3.63814E+18", "nombre": "Monster Energy Mango"}, {"sku": "1.55435E+17", "nombre": "Monster Energy Pipeline Punch"}, {"sku": "9.93179E+17", "nombre": "Cepita Durazno"}, {"sku": "3.079E+18", "nombre": "Coca-Cola"}, {"sku": "7.68606E+18", "nombre": "Coca - Cola"}, {"sku": "7.56442E+18", "nombre": "Powerade Mountain Blast"}, {"sku": "6.79899E+18", "nombre": "Cepita Anana"}, {"sku": "5.44548E+18", "nombre": "Cepita Naranja"}, {"sku": "7.52039E+18", "nombre": "Sprite Lima Limón"}, {"sku": "9.96722E+17", "nombre": "Familia Coca - Cola"}, {"sku": "1.41545E+17", "nombre": "Familia Coca - Cola"}, {"sku": "1.77394E+18", "nombre": "Coca - Cola Zero"}, {"sku": "8.27925E+18", "nombre": "En Del Valle Durazno 12UN 190ML"}, {"sku": "7.38938E+18", "nombre": "Coca-Cola TA SA"}, {"sku": "6.35728E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "1.36762E+18", "nombre": "Fanta Naranja"}, {"sku": "3.79258E+18", "nombre": "Powerade Frutas Tropicales"}, {"sku": "7.66586E+18", "nombre": "Powerade Mountain Blast"}, {"sku": "8.73141E+18", "nombre": "Monster Energy Green"}, {"sku": "3.87161E+17", "nombre": "Fanta Naranja"}, {"sku": "8.62678E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "5.02818E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "4.12137E+18", "nombre": "Fanta Fresa"}, {"sku": "4.29983E+18", "nombre": "Powerade Naranja Mandarina"}, {"sku": "1.15334E+18", "nombre": "Powerade Moras"}, {"sku": "8.42443E+18", "nombre": "Sprite Lima Limón"}, {"sku": "7.95868E+18", "nombre": "Coca - Cola"}, {"sku": "2.52929E+18", "nombre": "En Dasani 6UN 1.2L & Fury 3UN 500ML"}, {"sku": "3.75524E+18", "nombre": "Coca - Cola Zero"}, {"sku": "2.23945E+18", "nombre": "Coca - Cola"}, {"sku": "1.89285E+18", "nombre": "Coca - Cola Zero"}, {"sku": "3.35813E+18", "nombre": "Coca - Cola"}, {"sku": "5.36238E+17", "nombre": "Fuze Tea Negro Limón"}, {"sku": "9.82887E+17", "nombre": "En Fanta Naranja 4UN 1.35L & Fioravanti Fresa 4UN 1.35L & Sprite 4UN 1.35L"}, {"sku": "7.06992E+18", "nombre": "En Coca Cola Original (12UN 300ML - 6UN 300ML) & Fanta Naranja 4UN 300ML & Fioravanti Fresa 4UN 300ML & Sprite (4UN 300ML - 6UN 250ML)"}, {"sku": "6.5695E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "6.38875E+18", "nombre": "Del Valle Fizz Naranja"}, {"sku": "8.95293E+18", "nombre": "En Coca Cola Original 27UN 2L"}, {"sku": "5.69025E+18", "nombre": "Fanta Naranja"}, {"sku": "8.9988E+18", "nombre": "Fanta Naranja"}, {"sku": "6.5383E+18", "nombre": "En Inca Kola 36UN 900ML"}, {"sku": "5.96689E+18", "nombre": "En Coca Cola Original 15UN 1.25L"}, {"sku": "5.4878E+18", "nombre": "En Coca Cola Original 18UN 2L"}, {"sku": "9.4014E+16", "nombre": "En Coca Cola Original 36UN 500ML"}, {"sku": "5.82194E+18", "nombre": "En Coca Cola Original 72UN 300ML"}, {"sku": "7.28935E+18", "nombre": "En Powerade Frutas 7UN 1L"}, {"sku": "2.26586E+18", "nombre": "En Powerade Uva 7UN 1L"}, {"sku": "2.26269E+18", "nombre": "En Powerade Maracuyá 7UN 1L"}, {"sku": "4.27138E+18", "nombre": "En Powerade Manzana 6UN 1L & Powerade Mora 6UN 600ML & Powerade Uva 6UN 600ML"}, {"sku": "3.81077E+18", "nombre": "En Del Valle Naranja (12UN 950ML - 6UN 1.75L)"}, {"sku": "3.67354E+18", "nombre": "En Dasani (6UN 250ML - 6UN 250ML)"}, {"sku": "4.86777E+17", "nombre": "En Flashlyte (3UN 625ML - 3UN 625ML)"}, {"sku": "7.79072E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "2.37607E+17", "nombre": "Joya Ponche"}, {"sku": "6.91542E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "8.78591E+18", "nombre": "Chocolate M&M'S Singles 48 Gr."}, {"sku": "1.5383E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "1.5188E+18", "nombre": "Coca - Cola"}, {"sku": "3.13684E+18", "nombre": "Del Valle 100% Jugo Manzana"}, {"sku": "8.1755E+18", "nombre": "Del Valle Mango"}, {"sku": "2.74957E+18", "nombre": "Santa Clara Leche Entera"}, {"sku": "3.31984E+18", "nombre": "Familia Coca - Cola"}, {"sku": "2.15887E+18", "nombre": "Promo 25%: Leche Saborizada 6 Chocolate Gratis 2 Frutilla 135Ml."}, {"sku": "7.6481E+18", "nombre": "Ades Frutal Uva"}, {"sku": "8.50583E+18", "nombre": "Ades Frutal Manzana"}, {"sku": "8.96941E+18", "nombre": "Topo Chico Twist Toronja"}, {"sku": "7.31601E+18", "nombre": "Fanta Fresa"}, {"sku": "1.76073E+18", "nombre": "Del Valle Guayaba"}, {"sku": "7.02552E+18", "nombre": "Fresca Toronja"}, {"sku": "4.71602E+18", "nombre": "Coca - Cola Zero"}, {"sku": "8.62903E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "9.0579E+18", "nombre": "En Powerade Mora 7UN 1L"}, {"sku": "3.52537E+18", "nombre": "En Powerade Manzana 7UN 1L"}, {"sku": "4.58991E+18", "nombre": "Sprite Harmony Lima Limón"}, {"sku": "8.92129E+18", "nombre": "Joya"}, {"sku": "1.40388E+18", "nombre": "Ciel Mineralizada Agua Mineral"}, {"sku": "1.41549E+18", "nombre": "Monster Energy Original"}, {"sku": "8.75843E+18", "nombre": "Fanta Fresa"}, {"sku": "3.09405E+17", "nombre": "Topo Chico Sangría"}, {"sku": "6.37233E+18", "nombre": "Del Valle Reserva Granada"}, {"sku": "6.1267E+18", "nombre": "Sprite Lima Limón"}, {"sku": "8.98225E+18", "nombre": "En Coca Cola Original 120UN 300ML"}, {"sku": "5.45578E+18", "nombre": "En Fanta Naranja 12UN 300ML & Fioravanti Fresa 12UN 300ML & Inca Kola 12UN 300ML & Sprite 12UN 300ML"}, {"sku": "4.98499E+17", "nombre": "Coca-Cola Sabor Original"}, {"sku": "5.97184E+18", "nombre": "Chocolate de Mesa Abuelita Tablillas 6 Pz 540 gr / Caja"}, {"sku": "2.89733E+18", "nombre": "Powerade Coco"}, {"sku": "9.10061E+18", "nombre": "Sprite Lima Limón"}, {"sku": "6.02316E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "2.25819E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "2.22199E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "3.79867E+18", "nombre": "Coca - Cola Light"}, {"sku": "7.10065E+18", "nombre": "Coca - Cola"}, {"sku": "3.58177E+18", "nombre": "Coca - Cola Zero"}, {"sku": "4.68004E+18", "nombre": "Coca - Cola Zero"}, {"sku": "2.86061E+17", "nombre": "Monster Energy Ultra Water Melon"}, {"sku": "4.29806E+18", "nombre": "Frutsi Frutas Rojas"}, {"sku": "1.59484E+18", "nombre": "Del Valle Durazno"}, {"sku": "9.10006E+18", "nombre": "Fresca Toronja"}, {"sku": "7.0678E+18", "nombre": "Fanta Uva"}, {"sku": "4.80291E+18", "nombre": "Monster Energy Zero Ultra"}, {"sku": "6.52438E+18", "nombre": "Coca - Cola Light"}, {"sku": "4.2784E+18", "nombre": "Fuze Tea Negro Limón"}, {"sku": "1.56654E+18", "nombre": "Aquarius Pera"}, {"sku": "4.92656E+18", "nombre": "Aquarius Pomelo"}, {"sku": "6.70663E+18", "nombre": "Fioravanti Fresa"}, {"sku": "6.43387E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "4.32222E+18", "nombre": "Del Valle Fizz Limón"}, {"sku": "5.90384E+18", "nombre": "Del Valle Fizz Naranja"}, {"sku": "2.9063E+18", "nombre": "Fanta"}, {"sku": "8.76568E+18", "nombre": "Monster Energy Monarch"}, {"sku": "5.35569E+18", "nombre": "Coca - Cola Zero"}, {"sku": "3.58526E+17", "nombre": "Joya"}, {"sku": "6.85711E+18", "nombre": "Fanta Naranja"}, {"sku": "8.94111E+17", "nombre": "Inca-Kola Amarilla"}, {"sku": "9.16135E+18", "nombre": "Fresca Toronja"}, {"sku": "3.94344E+18", "nombre": "Santa Clara Leche Fresa"}, {"sku": "5.64182E+18", "nombre": "Dasani Sin Gas"}, {"sku": "6.17233E+18", "nombre": "Fioravanti Fresa"}, {"sku": "2.69226E+17", "nombre": "Topo Chico Sangría"}, {"sku": "4.00708E+18", "nombre": "Aquarius Manzana"}, {"sku": "1.89366E+18", "nombre": "Coca-Cola"}, {"sku": "7.08715E+18", "nombre": "Aquarius Naranja"}, {"sku": "6.46415E+17", "nombre": "Aquarius Pera"}, {"sku": "7.20034E+18", "nombre": "Fanta Naranja Film decorado"}, {"sku": "2.76766E+18", "nombre": "Benedictino Agua Mineral Con Gas"}, {"sku": "3.77003E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "3.93619E+18", "nombre": "Aquarius Manzana"}, {"sku": "6.40723E+18", "nombre": "Fanta Naranja"}, {"sku": "5.91444E+18", "nombre": "Aquarius Naranja"}, {"sku": "1.09282E+18", "nombre": "Fanta Naranja"}, {"sku": "2.71385E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "8.2574E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "4.88976E+18", "nombre": "En Fuze Tea Limón 10UN 1L"}, {"sku": "6.62019E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "6.19189E+18", "nombre": "Fioravanti Fresa"}, {"sku": "9.03616E+18", "nombre": "Joya Ponche"}, {"sku": "6.60051E+18", "nombre": "Joya Manzana"}, {"sku": "3.10473E+18", "nombre": "Fanta Naranja"}, {"sku": "7.0261E+18", "nombre": "Fresca Toronja"}, {"sku": "8.38052E+17", "nombre": "Coca - Cola Zero"}, {"sku": "2.21931E+18", "nombre": "Sprite Lima Limón"}, {"sku": "3.48034E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "2.87855E+18", "nombre": "Fanta Naranja"}, {"sku": "8.09438E+18", "nombre": "Fanta Naranja"}, {"sku": "7.7461E+18", "nombre": "Coca - Cola Light"}, {"sku": "4.60277E+18", "nombre": "Coca - Cola Zero"}, {"sku": "8.79636E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "7.11912E+18", "nombre": "Powerade Lima Limón"}, {"sku": "6.68825E+18", "nombre": "Monster Energy Ultra Paradise"}, {"sku": "7.64212E+18", "nombre": "Monster Energy Pipeline Punch"}, {"sku": "4.32212E+17", "nombre": "Joya"}, {"sku": "3.86528E+18", "nombre": "Coca - Cola Zero"}, {"sku": "6.10372E+17", "nombre": "Joya Durazno"}, {"sku": "8.31946E+18", "nombre": "Joya Manzana"}, {"sku": "6.55659E+18", "nombre": "Coca - Cola"}, {"sku": "3.85717E+18", "nombre": "Santa Clara Leche Light Deslactosada"}, {"sku": "1.86155E+18", "nombre": "En Coca Cola Original 6UN 1L"}, {"sku": "1.56116E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "6.58396E+18", "nombre": "Del Valle Fresh Naranja Verde"}, {"sku": "4.06528E+18", "nombre": "Joya Piña"}, {"sku": "2.49027E+18", "nombre": "Joya Manzana"}, {"sku": "1.24391E+18", "nombre": "Coca - Cola Light"}, {"sku": "5.34132E+18", "nombre": "Sprite Lima Limón"}, {"sku": "2.16915E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "7.34638E+18", "nombre": "Del Valle Fizz Limón"}, {"sku": "2.84609E+18", "nombre": "Coca - Cola Light Sin Cafeína"}, {"sku": "1.08767E+18", "nombre": "Coca - Cola"}, {"sku": "7.06153E+18", "nombre": "Powerade Frutas Rojas"}, {"sku": "1.83667E+18", "nombre": "Coca - Cola"}, {"sku": "8.58935E+18", "nombre": "Coca - Cola"}, {"sku": "3.57651E+18", "nombre": "Fanta Fresa"}, {"sku": "2.06573E+18", "nombre": "Fresca Toronja"}, {"sku": "4.99784E+18", "nombre": "Sprite Lima Limón"}, {"sku": "6.52967E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "1.79736E+18", "nombre": "Del Valle Fizz Naranja"}, {"sku": "1.64968E+18", "nombre": "Fanta Misterio"}, {"sku": "4.62621E+18", "nombre": "Joya Manzana"}, {"sku": "4.00064E+18", "nombre": "Coca - Cola"}, {"sku": "8.9326E+18", "nombre": "Coca - Cola Zero"}, {"sku": "9.01777E+18", "nombre": "Coca - Cola Light"}, {"sku": "6.54581E+18", "nombre": "Joya Manzana"}, {"sku": "6.67579E+18", "nombre": "Fanta Senzao Guaraná"}, {"sku": "4.38018E+18", "nombre": "Fanta Naranja"}, {"sku": "7.95282E+18", "nombre": "Sprite Lima Limón"}, {"sku": "5.28207E+18", "nombre": "En Powerade Frutas 6UN 350ML & Powerade Manzana 6UN 1L"}, {"sku": "4.28845E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "5.86408E+18", "nombre": "En Coca Cola Original 18UN 1.35L"}, {"sku": "3.0867E+18", "nombre": "Fanta Naranja"}, {"sku": "5.00405E+17", "nombre": "Coca - Cola"}, {"sku": "5.67009E+18", "nombre": "En Dasani (12UN 1.2L - 8UN 600ML)"}, {"sku": "9.09064E+18", "nombre": "En Fanta Naranja 4UN 1L & Fioravanti Fresa 4UN 1L & Sprite 4UN 1L"}, {"sku": "8.81079E+18", "nombre": "En Coca Cola Original 36UN 300ML"}, {"sku": "2.49145E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "3.67466E+18", "nombre": "Joya Durazno"}, {"sku": "6.40654E+18", "nombre": "Coca - Cola Zero"}, {"sku": "8.22638E+18", "nombre": "Joya Ponche"}, {"sku": "6.85655E+18", "nombre": "Joya Uva"}, {"sku": "4.24557E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.8097E+18", "nombre": "Santa Clara Leche Light"}, {"sku": "5.54469E+18", "nombre": "Fanta Fresa"}, {"sku": "1.2106E+18", "nombre": "Coca - Cola Zero"}, {"sku": "2.83797E+18", "nombre": "Coca - Cola Light"}, {"sku": "3.92673E+18", "nombre": "Coca - Cola Light"}, {"sku": "6.48892E+18", "nombre": "Coca - Cola Light"}, {"sku": "4.06377E+18", "nombre": "Fresca Toronja"}, {"sku": "1.6853E+18", "nombre": "Fresca Toronja"}, {"sku": "6.48185E+18", "nombre": "Joya Ponche"}, {"sku": "7.76891E+18", "nombre": "Fuze Tea Limón"}, {"sku": "1.12451E+18", "nombre": "Inacake Chococake Paquete x 2 Unid"}, {"sku": "4.05806E+18", "nombre": "Coca - Cola"}, {"sku": "6.57485E+18", "nombre": "Promo 20%: 16 Leches Chocolate Gratis 4 Leches Frutilla de 200Gr."}, {"sku": "7.07807E+18", "nombre": "Coca - Cola"}, {"sku": "4.01186E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.08676E+18", "nombre": "En Inca Kola 12UN 300ML"}, {"sku": "9.03599E+18", "nombre": "En Powerade Mora 72UN 1L"}, {"sku": "5.27309E+18", "nombre": "En Powerade Manzana 72UN 1L"}, {"sku": "3.50435E+18", "nombre": "Fanta Uva"}, {"sku": "4.73542E+18", "nombre": "Del Valle 100% Jugo Manzana"}, {"sku": "6.07555E+18", "nombre": "Familia Coca - Cola"}, {"sku": "8.25505E+18", "nombre": "Fanta Fresa"}, {"sku": "4.44623E+18", "nombre": "Coca - Cola Light"}, {"sku": "7.7432E+18", "nombre": "Coca - Cola Zero"}, {"sku": "2.32178E+18", "nombre": "Coca - Cola"}, {"sku": "4.72684E+18", "nombre": "Sprite Lima Limón"}, {"sku": "5.49808E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "9.06185E+18", "nombre": "Del Valle Néctar Durazno"}, {"sku": "2.69955E+18", "nombre": "En Coca Cola Original 120UN 300ML"}, {"sku": "5.02048E+18", "nombre": "En Dasani (8UN 600ML - 6UN 1.2L)"}, {"sku": "2.84964E+18", "nombre": "En Del Valle Naranja 7UN 950ML"}, {"sku": "8.12371E+18", "nombre": "Fresca Fusión"}, {"sku": "8.91654E+18", "nombre": "Familia Coca - Cola"}, {"sku": "1.8978E+18", "nombre": "Familia Coca - Cola"}, {"sku": "5.35572E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.23227E+18", "nombre": "Coca - Cola Zero"}, {"sku": "7.01502E+18", "nombre": "Topo Chico Agua Mineral"}, {"sku": "5.98707E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.08288E+18", "nombre": "En Coca Cola Original 3UN 3L"}, {"sku": "5.3232E+18", "nombre": "Monster Hamilton Uva"}, {"sku": "8.72826E+18", "nombre": "En Sprite 6UN 1.35L"}, {"sku": "3.37942E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "1.80287E+18", "nombre": "Aquarius Pera"}, {"sku": "1.75689E+18", "nombre": "Benedictino Agua Mineral"}, {"sku": "2.98039E+18", "nombre": "En Fanta Naranja 3UN 1L & Inca Kola 6UN 900ML & Sprite 3UN 1L"}, {"sku": "2.27041E+18", "nombre": "Coca - Cola Light"}, {"sku": "5.55292E+18", "nombre": "Coca - Cola Light"}, {"sku": "8.94071E+18", "nombre": "Fioravanti Fresa"}, {"sku": "6.23423E+16", "nombre": "Coca-Cola Sabor Original"}, {"sku": "9.74465E+17", "nombre": "Fanta Naranja"}, {"sku": "7.64027E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "8.10546E+18", "nombre": "Del Valle Néctar Naranja"}, {"sku": "6.03375E+17", "nombre": "Coca-Cola Sabor Original"}, {"sku": "3.60717E+18", "nombre": "Delaware Punch Uva"}, {"sku": "2.12014E+18", "nombre": "Valle Frut Mandarina"}, {"sku": "2.64896E+16", "nombre": "Sprite Lima Limón"}, {"sku": "2.46722E+18", "nombre": "Joya Uva"}, {"sku": "4.73019E+18", "nombre": "Fresca Zero Toronja"}, {"sku": "2.60347E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "2.94893E+18", "nombre": "Familia Coca - Cola"}, {"sku": "8.91306E+18", "nombre": "MONSTER ENERGY ULTRA STRAWBERRY DREAMS"}, {"sku": "2.29253E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "8.70365E+18", "nombre": "Del Valle 100% Jugo Naranja"}, {"sku": "2.40269E+18", "nombre": "En Coca Cola Original 6UN 300ML & Fanta Naranja 3UN 1.35L & Sprite 3UN 1.35L"}, {"sku": "2.27801E+18", "nombre": "Sprite Lima Limón"}, {"sku": "8.97938E+18", "nombre": "Fresca Toronja"}, {"sku": "2.42082E+18", "nombre": "Fanta Fresa"}, {"sku": "6.8228E+18", "nombre": "Familia Coca - Cola"}, {"sku": "6.91658E+16", "nombre": "Fanta Fresa"}, {"sku": "6.53529E+18", "nombre": "Fanta Naranja"}, {"sku": "3.3493E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "7.16387E+18", "nombre": "Sprite Lima Limón"}, {"sku": "2.09219E+18", "nombre": "Fresca Toronja"}, {"sku": "7.94752E+18", "nombre": "Fanta Naranja"}, {"sku": "5.72144E+18", "nombre": "En Coca Cola Original 12UN 1.25L"}, {"sku": "1.2871E+18", "nombre": "En Inca Kola (12UN 300ML - 12UN 900ML)"}, {"sku": "9.12808E+18", "nombre": "En Del Valle Manzana 18UN 950ML"}, {"sku": "3.11999E+18", "nombre": "Coca - Cola"}, {"sku": "5.38426E+18", "nombre": "Powerade Naranja Mandarina"}, {"sku": "7.83727E+18", "nombre": "Powerade Uva"}, {"sku": "9.52915E+17", "nombre": "Ciel Agua Purificada"}, {"sku": "4.11922E+18", "nombre": "Familia Dasani Saborizada Paquete Surtido"}, {"sku": "3.57642E+18", "nombre": "Familia Dasani Saborizada Paquete Surtido"}, {"sku": "3.35912E+18", "nombre": "Coca - Cola Zero"}, {"sku": "8.89965E+18", "nombre": "Coca-Cola Zero Cola"}, {"sku": "3.97746E+17", "nombre": "Coca-Cola Zero Cola"}, {"sku": "4.99935E+18", "nombre": "Benedictino Agua Mineral"}, {"sku": "3.74914E+18", "nombre": "Aquarius Limonada"}, {"sku": "4.83793E+18", "nombre": "Aquarius Pomelo"}, {"sku": "4.30072E+18", "nombre": "AdeS Manzana"}, {"sku": "8.95175E+18", "nombre": "Lacteos Chocolatada"}, {"sku": "5.99531E+18", "nombre": "Coca - Cola Light"}, {"sku": "6.72295E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "2.394E+18", "nombre": "En Coca Cola Original 18UN 3L"}, {"sku": "8.87943E+18", "nombre": "En Powerade Frutas 3UN 1L & Powerade Manzana (6UN 1L - 6UN 600ML) & Powerade Mora 6UN 600ML"}, {"sku": "3.02105E+18", "nombre": "Powerade Manzana Acida"}, {"sku": "7.35601E+18", "nombre": "Topo Chico Sangría"}, {"sku": "8.21129E+18", "nombre": "Del Valle Manzana"}, {"sku": "5.87883E+17", "nombre": "Inca-Kola Dorada STV"}, {"sku": "2.9126E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "5.42498E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "3.86963E+18", "nombre": "Coca - Cola"}, {"sku": "6.61746E+18", "nombre": "Joya Ponche"}, {"sku": "6.00534E+18", "nombre": "Joya Durazno"}, {"sku": "2.76095E+18", "nombre": "Fresca Toronja"}, {"sku": "1.34214E+18", "nombre": "Joya Fresa"}, {"sku": "5.93119E+17", "nombre": "Joya Piña"}, {"sku": "9.15067E+18", "nombre": "Joya Manzana"}, {"sku": "7.793E+18", "nombre": "Del Valle Néctar Durazno"}, {"sku": "1.43972E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "4.1994E+18", "nombre": "Fanta Naranja"}, {"sku": "4.05315E+17", "nombre": "Coca-Cola Light"}, {"sku": "8.06351E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "6.83329E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "4.51935E+18", "nombre": "Coca Cola Cherry"}, {"sku": "4.69135E+18", "nombre": "Fanta Fresa"}, {"sku": "6.64292E+18", "nombre": "Fanta Naranja"}, {"sku": "6.87185E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "3.00446E+18", "nombre": "Fanta Naranja"}, {"sku": "8.45136E+17", "nombre": "Coca-Cola"}, {"sku": "1.54955E+18", "nombre": "Aquarius Pomelo Rosado"}, {"sku": "7.8465E+18", "nombre": "Familia Coca - Cola"}, {"sku": "5.1168E+18", "nombre": "Frutsi"}, {"sku": "8.57838E+17", "nombre": "Coca - Cola Light Sin Cafeína"}, {"sku": "3.14698E+18", "nombre": "Fresca Toronja"}, {"sku": "1.41126E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "7.81848E+18", "nombre": "Cepita Durazno"}, {"sku": "4.91774E+18", "nombre": "Cepita Fresh Naranja"}, {"sku": "3.155E+17", "nombre": "Cepita Fresh Pomelo"}, {"sku": "8.79352E+18", "nombre": "Monster Energy Ultra"}, {"sku": "8.71E+17", "nombre": "Joya Ponche"}, {"sku": "6.47853E+18", "nombre": "Familia Coca - Cola"}, {"sku": "1.2072E+18", "nombre": "Joya Manzana"}, {"sku": "4.58792E+18", "nombre": "En Coca Cola Original 18UN 1.35L"}, {"sku": "5.52613E+18", "nombre": "En Coca Cola Original 18UN 1L"}, {"sku": "7.39775E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "3.99027E+18", "nombre": "Fioravanti Fresa"}, {"sku": "2.08383E+18", "nombre": "Inca-Kola Dorada STV"}, {"sku": "2.04595E+17", "nombre": "Sprite Lima Limón"}, {"sku": "3.52301E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "8.23839E+18", "nombre": "Sprite Lima Limón"}, {"sku": "4.69628E+18", "nombre": "Fresca Fusión"}, {"sku": "8.07513E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "9.41585E+17", "nombre": "Fuze Tea Limón"}, {"sku": "1.63827E+18", "nombre": "Fanta Naranja"}, {"sku": "5.28711E+18", "nombre": "Fanta Fresa"}, {"sku": "6.93354E+18", "nombre": "Fresca Toronja"}, {"sku": "5.33059E+18", "nombre": "Flashlyte Uva"}, {"sku": "9.03066E+18", "nombre": "Promo: 6 Leche Saborizada Chocolate 200Ml. Gratis 2 Leche Saborizada Frutilla"}, {"sku": "8.59776E+18", "nombre": "En Coca Cola Original 36UN 300ML"}, {"sku": "7.86875E+18", "nombre": "En Fanta Naranja 12UN 250ML & Fioravanti Fresa 12UN 250ML & Fioravanti Manzana 12UN 250ML & Inca Kola 12UN 300ML & Sprite 12UN 250ML"}, {"sku": "5.00681E+18", "nombre": "En Fanta Naranja 6UN 250ML & Fanta Uva 6UN 250ML"}, {"sku": "1.61233E+18", "nombre": "Coca - Cola Light"}, {"sku": "2.85603E+18", "nombre": "Joya Ponche"}, {"sku": "4.89437E+18", "nombre": "Familia Coca - Cola"}, {"sku": "1.4813E+18", "nombre": "Familia Coca - Cola"}, {"sku": "6.15656E+18", "nombre": "Coca - Cola Zero"}, {"sku": "2.8139E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "4.55192E+18", "nombre": "Pulpy"}, {"sku": "4.56471E+18", "nombre": "Chocolate Milky Way Barra 52 Gr."}, {"sku": "6.64668E+18", "nombre": "Joya Ponche"}, {"sku": "6.81319E+18", "nombre": "Coca-Cola TA"}, {"sku": "2.06688E+18", "nombre": "Fresca Toronja"}, {"sku": "6.13448E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "4.1652E+17", "nombre": "Coca - Cola"}, {"sku": "6.72289E+18", "nombre": "Familia Coca - Cola"}, {"sku": "4.9178E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "8.80153E+18", "nombre": "Coca-Cola Film decorado"}, {"sku": "4.1323E+18", "nombre": "Fanta Naranja"}, {"sku": "2.01716E+17", "nombre": "Coca-Cola"}, {"sku": "3.61903E+18", "nombre": "Fanta Naranja"}, {"sku": "2.91625E+18", "nombre": "Aquarius Pomelo Rosado"}, {"sku": "1.97903E+18", "nombre": "Schweppes Tónica"}, {"sku": "5.29778E+17", "nombre": "Fanta Limón"}, {"sku": "5.69591E+18", "nombre": "Cepita Fresh Manzana"}, {"sku": "4.44758E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "6.13173E+18", "nombre": "Powerade Frutas Tropicales"}, {"sku": "3.28606E+18", "nombre": "AdeS Almendra"}, {"sku": "1.50085E+18", "nombre": "Aquarius Manzana"}, {"sku": "2.8744E+18", "nombre": "Aquarius Anana Jengibre"}, {"sku": "6.5716E+18", "nombre": "Fanta Manzana"}, {"sku": "8.61315E+18", "nombre": "Schweppes Pomelo Zero"}, {"sku": "2.56157E+17", "nombre": "Coca-Cola Zero Cola"}, {"sku": "1.59874E+18", "nombre": "Cepita Manzana"}, {"sku": "5.44553E+18", "nombre": "Cepita Multifruta"}, {"sku": "4.30017E+18", "nombre": "Fanta Pomelo"}, {"sku": "6.71735E+18", "nombre": "Cepita Frutilla-Mango"}, {"sku": "2.55878E+18", "nombre": "Sprite Zero Lima-Limón"}, {"sku": "7.10276E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "8.94106E+18", "nombre": "Coca-Cola Zero Cola"}, {"sku": "6.95899E+18", "nombre": "Coca-Cola Zero Cola"}, {"sku": "5.38273E+18", "nombre": "Fanta Zero Naranja"}, {"sku": "8.80679E+18", "nombre": "Benedictino Agua Mineral"}, {"sku": "5.45064E+18", "nombre": "Aquarius Naranja"}, {"sku": "1.55477E+18", "nombre": "Aquarius Pomelo Rosado"}, {"sku": "3.75994E+18", "nombre": "Fresca Fusión"}, {"sku": "6.31859E+18", "nombre": "Coca-Cola Origial"}, {"sku": "1.54216E+18", "nombre": "Coca - Cola Zero"}, {"sku": "6.14819E+17", "nombre": "En Coca Cola Original 12UN 300ML & Sprite 12UN 250ML"}, {"sku": "2.91296E+18", "nombre": "En Del Valle Durazno 3UN 1L"}, {"sku": "4.08841E+18", "nombre": "Ciel Exprim Jamaica"}, {"sku": "2.37459E+18", "nombre": "Ades Soya Natural"}, {"sku": "6.79705E+18", "nombre": "Fresca Toronja"}, {"sku": "2.13481E+18", "nombre": "Fresca Fusión"}, {"sku": "7.83852E+18", "nombre": "Topo Chico Cocteles Cantarito"}, {"sku": "1.80519E+18", "nombre": "Topo Chico Cocteles Paloma"}, {"sku": "2.78442E+17", "nombre": "En Fanta Naranja 6UN 300ML & Fioravanti Fresa 6UN 300ML & Inca Kola 6UN 300ML & Sprite 6UN 300ML"}, {"sku": "2.20613E+18", "nombre": "Familia Coca - Cola"}, {"sku": "6.48266E+18", "nombre": "Dual Pack Coca Cola + Coca Cola Zero"}, {"sku": "3.44771E+18", "nombre": "Joya Manzana"}, {"sku": "5.31911E+17", "nombre": "Coca - Cola Light"}, {"sku": "3.0137E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.06776E+18", "nombre": "Coca - Cola Zero"}, {"sku": "1.25463E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "5.0842E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.20879E+18", "nombre": "Familia Coca - Cola"}, {"sku": "5.52545E+18", "nombre": "Familia Coca - Cola"}, {"sku": "8.70109E+18", "nombre": "Fanta Naranja"}, {"sku": "4.13263E+18", "nombre": "Cepita Fresh Pomelo"}, {"sku": "5.82814E+18", "nombre": "Helado Topsy Clásico Chocolate 1L"}, {"sku": "1.17428E+18", "nombre": "Helado Topsy Choco choc Doble chocolate (1X60U) 60ml"}, {"sku": "2.50882E+17", "nombre": "Helado Topsy Triple Chocolate 1L"}, {"sku": "9.15221E+16", "nombre": "Helado Galletopsy Frutilla Chocolate (1X20U) 118ml"}, {"sku": "1.10224E+18", "nombre": "Fanta Naranja"}, {"sku": "6.54919E+18", "nombre": "Fresca Toronja"}, {"sku": "2.47404E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "2.95129E+18", "nombre": "Sprite Lima Limón"}, {"sku": "7.84612E+18", "nombre": "Coca - Cola Zero"}, {"sku": "5.84993E+17", "nombre": "Monster Energy Zero Sugar Green"}, {"sku": "4.66106E+18", "nombre": "En Coca Cola Original (6UN 300ML - 6UN 500ML - 12UN 300ML)"}, {"sku": "7.79529E+18", "nombre": "En Powerade Frutas 3UN 1L"}, {"sku": "3.30503E+18", "nombre": "En Powerade Mora 3UN 1L"}, {"sku": "4.18484E+18", "nombre": "En Powerade Manzana 6UN 350ML"}, {"sku": "5.43136E+18", "nombre": "Fanta Fresa"}, {"sku": "2.53865E+18", "nombre": "Coca - Cola Light"}, {"sku": "4.0617E+18", "nombre": "Sprite Lima Limón"}, {"sku": "6.9566E+17", "nombre": "Familia Coca - Cola"}, {"sku": "5.45156E+18", "nombre": "Topo Chico Sangría"}, {"sku": "5.61025E+18", "nombre": "Joya Manzana"}, {"sku": "7.75593E+17", "nombre": "Del Valle Fizz Surtida"}, {"sku": "4.1948E+18", "nombre": "Fanta Uva"}, {"sku": "4.07299E+18", "nombre": "Fanta Piña"}, {"sku": "1.41279E+18", "nombre": "Joya Durazno"}, {"sku": "2.84823E+18", "nombre": "Santa Clara Leche Deslactosada Semi"}, {"sku": "6.44466E+18", "nombre": "Santa Clara Leche Light"}, {"sku": "6.05855E+18", "nombre": "Del Valle Fizz Naranja"}, {"sku": "5.3072E+18", "nombre": "En Dasani (48UN 1.2L - 16UN 600ML)"}, {"sku": "7.35308E+18", "nombre": "En Del Valle Naranja 24UN 950ML"}, {"sku": "2.81866E+18", "nombre": "Coca - Cola Zero"}, {"sku": "7.20832E+18", "nombre": "Coca - Cola"}, {"sku": "7.24847E+18", "nombre": "Joya Ponche"}, {"sku": "4.9095E+18", "nombre": "Coca - Cola Light"}, {"sku": "1.70988E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.04136E+18", "nombre": "Fresca Toronja"}, {"sku": "7.81355E+18", "nombre": "Ades Soya Light Natural"}, {"sku": "6.47704E+18", "nombre": "Coca - Cola Life"}, {"sku": "6.53011E+18", "nombre": "Coca - Cola"}, {"sku": "5.87807E+18", "nombre": "Cepita Manzana"}, {"sku": "5.0308E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "7.41288E+18", "nombre": "AdeS Anana"}, {"sku": "7.42468E+18", "nombre": "AdeS Anana"}, {"sku": "4.05037E+18", "nombre": "Fanta Naranja"}, {"sku": "5.36986E+18", "nombre": "Coca-Cola"}, {"sku": "3.03543E+18", "nombre": "Monster Energy Reserve White Pineapple"}, {"sku": "6.45524E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "6.83403E+18", "nombre": "Familia Monster Paquete Surtido"}, {"sku": "6.26524E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "2.99665E+18", "nombre": "Chocolate M&M'S Maní Singles 49 Gr."}, {"sku": "2.93187E+18", "nombre": "Fanta Naranja"}, {"sku": "3.0834E+18", "nombre": "Aquarius Pomelo Rosado"}, {"sku": "3.33489E+18", "nombre": "Joya Manzana"}, {"sku": "8.881E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "6.66621E+18", "nombre": "Santa Clara Leche Chocolate"}, {"sku": "8.13339E+18", "nombre": "Del Valle Reserva Granada"}, {"sku": "4.08873E+18", "nombre": "Fanta Splash Naranja"}, {"sku": "5.61422E+18", "nombre": "En Dasani (16UN 600ML - 36UN 1.2L)"}, {"sku": "2.24211E+17", "nombre": "En Del Valle Durazno (6UN 1L - 12UN 250ML)"}, {"sku": "7.9796E+18", "nombre": "Familia Coca - Cola"}, {"sku": "4.73477E+17", "nombre": "Cepita Durazno"}, {"sku": "2.14667E+18", "nombre": "Schweppes Tónica"}, {"sku": "1.68911E+17", "nombre": "Schweppes Pomelo"}, {"sku": "4.71259E+18", "nombre": "Aquarius Limonada"}, {"sku": "1.1821E+18", "nombre": "Aquarius Pomelo"}, {"sku": "3.98942E+18", "nombre": "Monster Energy Ultra Sunrise"}, {"sku": "1.98159E+17", "nombre": "Coca-Cola Zero Cola"}, {"sku": "6.31382E+18", "nombre": "Fanta Misterio Chucky"}, {"sku": "2.48559E+17", "nombre": "Aquarius Naranja"}, {"sku": "9.14805E+18", "nombre": "Aquarius Pera"}, {"sku": "6.66697E+18", "nombre": "Aquarius Pomelo Rosado"}, {"sku": "8.84602E+18", "nombre": "Aquarius Pomelo"}, {"sku": "8.15603E+18", "nombre": "Cepita Fresh Naranja"}, {"sku": "5.53622E+18", "nombre": "Coca - Cola"}, {"sku": "7.90439E+18", "nombre": "Fanta Fresa"}, {"sku": "8.06394E+18", "nombre": "Del Valle Fresh Naranja Verde"}, {"sku": "8.41456E+17", "nombre": "Fuze Tea Negro Limón"}, {"sku": "8.80549E+18", "nombre": "En Coca Cola Original (24UN 300ML - 6UN 300ML)"}, {"sku": "1.51767E+18", "nombre": "En Fuze Tea Limón 6UN 1L & Monster 1UN 473ML"}, {"sku": "5.16427E+18", "nombre": "En Dasani 6UN 1.2L & Monster Zero 1UN 473ML"}, {"sku": "4.416E+18", "nombre": "Fioravanti Fresa"}, {"sku": "7.70591E+18", "nombre": "Fanta Naranja"}, {"sku": "1.78527E+18", "nombre": "Familia Coca - Cola"}, {"sku": "4.01414E+18", "nombre": "Ciel Saborizada Toronja"}, {"sku": "4.21324E+18", "nombre": "Fanta Naranja"}, {"sku": "2.24342E+18", "nombre": "Sprite Lima Limón"}, {"sku": "2.96906E+18", "nombre": "Fresca Toronja"}, {"sku": "6.01382E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "2.33221E+18", "nombre": "Fanta Naranja"}, {"sku": "2.93078E+17", "nombre": "Sprite Lima Limón"}, {"sku": "3.41346E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "2.76093E+18", "nombre": "Coca - Cola Zero"}, {"sku": "6.52995E+18", "nombre": "En Coca Cola Original 10UN 1.25L"}, {"sku": "5.95527E+18", "nombre": "Topo Chico Agua Mineral"}, {"sku": "6.32534E+18", "nombre": "Del Valle Néctar Durazno"}, {"sku": "3.96527E+18", "nombre": "Topo Chico Sangría Light"}, {"sku": "1.7382E+17", "nombre": "Fanta Fresa"}, {"sku": "8.79321E+17", "nombre": "En Powerade Manzana 6UN 1L"}, {"sku": "5.93988E+17", "nombre": "Topo Chico Agua Mineral"}, {"sku": "5.15194E+18", "nombre": "Del Valle Surtida"}, {"sku": "8.34259E+18", "nombre": "Promo: Leche Saborizada (4 Chocolate+4 Frutilla) 135Ml Gratis 2 Leches Saborizadas Chocolate 135Ml."}, {"sku": "7.14697E+18", "nombre": "Familia Coca - Cola"}, {"sku": "6.25867E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "6.51642E+18", "nombre": "Promo 14%: Leches Saborizadas 200ML. 12 Chocolate+2 Frutilla"}, {"sku": "5.11835E+18", "nombre": "En Del Valle Naranja 14UN 950ML"}, {"sku": "5.47905E+18", "nombre": "En Del Valle Manzana 14UN 950ML"}, {"sku": "1.66359E+18", "nombre": "En Coca Cola Original 36UN 1.25L"}, {"sku": "8.94579E+18", "nombre": "Ciel Mineralizada Agua Mineral"}, {"sku": "8.95413E+18", "nombre": "Fioravanti Fresa"}, {"sku": "2.52456E+18", "nombre": "Fioravanti Fresa"}, {"sku": "3.80374E+18", "nombre": "Dual Pack Aquarius Pera + Aquarius Pera"}, {"sku": "7.98173E+18", "nombre": "Familia Coca - Cola"}, {"sku": "5.8308E+18", "nombre": "Del Valle Fresh Naranja Verde"}, {"sku": "2.95254E+18", "nombre": "Monster Energy Original"}, {"sku": "2.41845E+18", "nombre": "Coca-Cola Zero Cola"}, {"sku": "1.58817E+16", "nombre": "Fanta Naranja"}, {"sku": "8.36021E+18", "nombre": "En Dasani 6UN 300ML & Fuze Tea Limón 12UN 550ML"}, {"sku": "2.31483E+18", "nombre": "En Coca Cola Original (12UN 300ML - 48UN 300ML)"}, {"sku": "7.84347E+18", "nombre": "En Dasani 6UN 1.2L & Monster 1UN 473ML"}, {"sku": "2.36909E+18", "nombre": "Fuze Tea Mango Manzanilla"}, {"sku": "7.37982E+18", "nombre": "Familia Coca - Cola"}, {"sku": "1.05183E+18", "nombre": "Powerade Lima Limón"}, {"sku": "3.95484E+18", "nombre": "Familia Coca - Cola"}, {"sku": "5.77947E+18", "nombre": "En Coca Cola Original 28UN 200ML"}, {"sku": "9.46946E+17", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "2.58107E+18", "nombre": "En Dasani 1UN 1.75L & Fuze Tea Limón 6UN 1.5L"}, {"sku": "6.25829E+18", "nombre": "Coca - Cola Light"}, {"sku": "6.3538E+16", "nombre": "Coca - Cola Light"}, {"sku": "6.42445E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "6.72968E+17", "nombre": "Coca-Cola Sabor Orginial"}, {"sku": "5.54999E+17", "nombre": "En Del Valle Naranja 6UN 1.25L"}, {"sku": "4.82341E+18", "nombre": "Familia Coca - Cola"}, {"sku": "6.98538E+18", "nombre": "Coca - Cola"}, {"sku": "3.07477E+18", "nombre": "En Powerade Manzana 12UN 350ML"}, {"sku": "3.89964E+18", "nombre": "Flashlyte Coco Con Limon"}, {"sku": "5.49941E+18", "nombre": "Ina Cake Rebanada Chocolate 80 Gr."}, {"sku": "8.0901E+18", "nombre": "Coca-Cola"}, {"sku": "7.79676E+18", "nombre": "Santa Clara Leche Cajeta"}, {"sku": "2.47725E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "2.91716E+18", "nombre": "Fanta Naranja"}, {"sku": "3.31835E+18", "nombre": "Fanta Uva"}, {"sku": "4.39793E+18", "nombre": "Topo Chico Agua Mineral"}, {"sku": "6.52044E+18", "nombre": "En Powerade Frutas 21UN 1L"}, {"sku": "4.95142E+18", "nombre": "En Del Valle Manzana 7UN 950ML"}, {"sku": "1.07694E+18", "nombre": "Inca-Kola Dorada STV"}, {"sku": "4.6438E+18", "nombre": "Del Valle 100% Jugo Naranja"}, {"sku": "7.54619E+18", "nombre": "Coca-Cola Zero Cola"}, {"sku": "2.32683E+18", "nombre": "Topo Chico Sangría Light"}, {"sku": "3.13279E+18", "nombre": "AdeS Manzana"}, {"sku": "5.92263E+18", "nombre": "En Fury 3UN 500ML & Fuze Tea Limón 3UN 1L"}, {"sku": "4.74034E+18", "nombre": "En Fanta Naranja 6UN 500ML & Fanta Uva 6UN 500ML"}, {"sku": "7.34685E+18", "nombre": "En Coca Cola Original (6UN 200ML - 24UN 300ML)"}, {"sku": "2.83957E+18", "nombre": "Del Valle Mango"}, {"sku": "7.11178E+18", "nombre": "Promo 20%: Leche Saborizada (6 Chocolate+2 Frutilla) 200Ml."}, {"sku": "3.19871E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.26294E+18", "nombre": "Joya Manzana"}, {"sku": "8.3578E+18", "nombre": "Joya"}, {"sku": "3.52611E+16", "nombre": "Powerade Manzana"}, {"sku": "2.44174E+18", "nombre": "Coca - Cola"}, {"sku": "3.93511E+18", "nombre": "Santa Clara Leche Deslactosada Semi"}, {"sku": "3.40351E+18", "nombre": "En Coca Cola Original 12UN 300ML & Sprite 12UN 300ML"}, {"sku": "4.71916E+17", "nombre": "Joya"}, {"sku": "4.76954E+18", "nombre": "Joya Manzana"}, {"sku": "5.90667E+18", "nombre": "Del Valle Fizz Surtida"}, {"sku": "8.16159E+18", "nombre": "Familia Coca - Cola"}, {"sku": "4.96074E+18", "nombre": "Joya Durazno"}, {"sku": "5.35134E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "5.67905E+18", "nombre": "En Dasani (6UN 500ML - 6UN 500ML - 6UN 250ML - 6UN 250ML)"}, {"sku": "8.02026E+18", "nombre": "En Inca Kola 48UN 900ML"}, {"sku": "7.24787E+18", "nombre": "En Coca Cola Original 96UN 1.35L"}, {"sku": "7.30691E+18", "nombre": "Coca - Cola"}, {"sku": "1.16927E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "9.17531E+18", "nombre": "Monster Energy Original"}, {"sku": "5.92987E+17", "nombre": "Inca-Kola Amarilla"}, {"sku": "9.02861E+18", "nombre": "Crush Naranja"}, {"sku": "8.89961E+17", "nombre": "Dual Pack Coca Cola + Coca Cola Zero"}, {"sku": "8.42723E+16", "nombre": "Joya Ponche"}, {"sku": "8.29554E+18", "nombre": "En Coca Cola Original 60UN 300ML"}, {"sku": "2.60491E+18", "nombre": "En Coca Cola Original 60UN 500ML"}, {"sku": "9.12319E+18", "nombre": "Topo Chico Hard Seltzer Mango Tropical"}, {"sku": "7.66745E+18", "nombre": "Del Valle Surtida"}, {"sku": "2.00915E+18", "nombre": "Monster Energy Rossi"}, {"sku": "6.12828E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "2.12272E+18", "nombre": "Familia Coca - Cola"}, {"sku": "2.53834E+18", "nombre": "Del Valle Mandarina"}, {"sku": "5.50214E+17", "nombre": "Sprite Lima Limón"}, {"sku": "5.61582E+18", "nombre": "Sprite Zero Lima Limón"}, {"sku": "8.81368E+18", "nombre": "Promo 20%: Leche Saborizada (6 Frutilla+5 Chocolate) 200Ml."}, {"sku": "2.17684E+18", "nombre": "Joya"}, {"sku": "7.96583E+17", "nombre": "Fuze Tea Negro Limón"}, {"sku": "4.58176E+18", "nombre": "Lacteos Chocolatada"}, {"sku": "1.54888E+18", "nombre": "En Coca Cola Original 12UN 2L"}, {"sku": "1.33067E+18", "nombre": "En Del Valle Durazno 14UN 250ML"}, {"sku": "4.36331E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "8.25695E+18", "nombre": "Powerade Frutas Cítricas"}, {"sku": "5.55895E+18", "nombre": "Sprite Lima Limón"}, {"sku": "8.05322E+18", "nombre": "Fresca Toronja"}, {"sku": "6.28808E+18", "nombre": "Sprite Lima Limón"}, {"sku": "7.56785E+18", "nombre": "Del Valle Néctar Manzana"}, {"sku": "8.76567E+18", "nombre": "En Fanta Naranja 4UN 1.35L & Fioravanti Fresa 4UN 1.35L & Sprite 4UN 1.35L"}, {"sku": "3.17473E+18", "nombre": "Coca - Cola"}, {"sku": "6.07403E+18", "nombre": "Coca - Cola Zero"}, {"sku": "2.76473E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "4.71195E+17", "nombre": "Valle Frut Limón"}, {"sku": "1.94846E+18", "nombre": "Fanta Fresa"}, {"sku": "1.53772E+18", "nombre": "Fresca Toronja"}, {"sku": "7.63663E+18", "nombre": "Del Valle Fresh Naranja"}, {"sku": "5.70963E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "3.0695E+18", "nombre": "Powerade Manzana"}, {"sku": "2.81069E+18", "nombre": "Tapas Benedictino"}, {"sku": "7.15504E+18", "nombre": "Powerade Sour Green Apple"}, {"sku": "5.57685E+18", "nombre": "Crush Pomelo"}, {"sku": "5.75626E+18", "nombre": "Fanta Naranja"}, {"sku": "8.95467E+18", "nombre": "Monster Energy Green Zero"}, {"sku": "2.81839E+18", "nombre": "Fuze Tea Lichi"}, {"sku": "4.48131E+18", "nombre": "En Coca Cola Original (12UN 1L - 12UN 1.25L)"}, {"sku": "3.41877E+17", "nombre": "Joya Manzana"}, {"sku": "7.77127E+18", "nombre": "Helado Topsy Choc Chocolate (1X60U) 60ml"}, {"sku": "2.36673E+18", "nombre": "Coca - Cola Light"}, {"sku": "7.24756E+18", "nombre": "Promo: 12 Leches Saborizadas Chocolate Gratis 3 Leches Frutilla 135Ml."}, {"sku": "3.94893E+18", "nombre": "En Inca Kola 216UN 900ML"}, {"sku": "4.28662E+18", "nombre": "Flashlyte Fresa"}, {"sku": "4.68606E+18", "nombre": "Flashlyte Uva"}, {"sku": "1.56941E+18", "nombre": "Inca-Kola Dorada STV"}, {"sku": "8.55527E+18", "nombre": "En Fanta Naranja 6UN 1.35L & Fanta Uva 6UN 1.35L"}, {"sku": "5.43917E+18", "nombre": "En Coca Cola Original 36UN 1L"}, {"sku": "4.94597E+18", "nombre": "Coca - Cola"}, {"sku": "3.11595E+18", "nombre": "Las 3 Niñas Chocolatada"}, {"sku": "7.55303E+18", "nombre": "Cepita Naranja"}, {"sku": "6.51848E+18", "nombre": "En Fanta Naranja 8UN 300ML & Fioravanti Fresa 8UN 300ML & Inca Kola 6UN 300ML & Sprite 8UN 300ML"}, {"sku": "3.01419E+17", "nombre": "Topo Chico Agua Mineral"}, {"sku": "3.24747E+18", "nombre": "Promo 18%: Leche Saborizada (48 Frutilla + 48 Chocolate) 135Ml."}, {"sku": "7.48772E+18", "nombre": "Joya"}, {"sku": "4.42162E+18", "nombre": "Joya"}, {"sku": "1.46263E+18", "nombre": "Joya Uva"}, {"sku": "4.43953E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.01446E+18", "nombre": "Coca-Cola Zero Cola"}, {"sku": "2.19123E+18", "nombre": "AdeS Durazno"}, {"sku": "3.4834E+18", "nombre": "Ades Frutal Naranja"}, {"sku": "3.89142E+17", "nombre": "Familia Coca - Cola"}, {"sku": "8.42399E+18", "nombre": "Familia Coca - Cola"}, {"sku": "2.88152E+18", "nombre": "En Powerade Mora 36UN 600ML"}, {"sku": "1.15326E+18", "nombre": "En Powerade Manzana 60UN 600ML"}, {"sku": "8.80354E+18", "nombre": "Del Valle Néctar Naranja"}, {"sku": "7.32153E+18", "nombre": "En Powerade Manzana 21UN 1L"}, {"sku": "4.47451E+18", "nombre": "En Powerade Frutas 36UN 600ML"}, {"sku": "4.63981E+18", "nombre": "En Monster Ultra Zero 2UN 473ML"}, {"sku": "8.3932E+18", "nombre": "En Powerade Uva 36UN 600ML"}, {"sku": "1.89583E+18", "nombre": "En Dasani (36UN 1.2L - 80UN 600ML)"}, {"sku": "5.59622E+18", "nombre": "Joya Durazno"}, {"sku": "6.6785E+18", "nombre": "Fanta Manzana"}, {"sku": "5.97103E+18", "nombre": "Cepita Naranja"}, {"sku": "4.10313E+18", "nombre": "Fanta Zero Naranja"}, {"sku": "5.64019E+18", "nombre": "Cepita Manzana"}, {"sku": "8.04311E+18", "nombre": "En Dasani (6UN 250ML - 6UN 250ML) & Del Valle Durazno 6UN 190ML"}, {"sku": "5.6217E+18", "nombre": "Fioravanti Manzana Roja"}, {"sku": "2.64798E+18", "nombre": "Sprite Lima Limón"}, {"sku": "1.64725E+18", "nombre": "Coca-Cola"}, {"sku": "1.15352E+18", "nombre": "Coca - Cola Light"}, {"sku": "6.66834E+18", "nombre": "Coca - Cola Zero"}, {"sku": "2.32291E+16", "nombre": "Fanta Naranja"}, {"sku": "8.85009E+18", "nombre": "En Sprite 12UN 1L"}, {"sku": "8.68921E+18", "nombre": "En Coca Cola Original 30UN 1.25L"}, {"sku": "8.48568E+17", "nombre": "Joya Manzana"}, {"sku": "5.18986E+18", "nombre": "Coca - Cola"}, {"sku": "6.52428E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "7.77297E+17", "nombre": "Promo 16%: Leche Saborizada (11 Chocolate + 10 Frutilla) 135Ml."}, {"sku": "4.08884E+18", "nombre": "Santa Clara Leche Light Deslactosada"}, {"sku": "1.04303E+18", "nombre": "Del Valle Fresh Manzana"}, {"sku": "2.70806E+18", "nombre": "Del Valle Mango"}, {"sku": "2.4111E+18", "nombre": "Del Valle Néctar Manzana"}, {"sku": "8.62754E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "3.59118E+18", "nombre": "Galleta Konitos Chocolate Funda 75 Gr."}, {"sku": "4.78205E+18", "nombre": "En Coca Cola Original 12UN 1.35L"}, {"sku": "8.48171E+18", "nombre": "Powerade Uva"}, {"sku": "5.2819E+18", "nombre": "Familia Monster Paquete Surtido"}, {"sku": "2.79408E+18", "nombre": "Powerade Uva"}, {"sku": "3.30072E+18", "nombre": "En Coca Cola Original (12UN 1L - 10UN 1.25L)"}, {"sku": "3.4093E+18", "nombre": "En Coca Cola Original 96UN 1.25L"}, {"sku": "9.09442E+18", "nombre": "Coca - Cola Light"}, {"sku": "7.41115E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.50952E+18", "nombre": "En Coca Cola Original 6UN 3L & Monster Ultraparidese 1UN 473ML"}, {"sku": "3.67864E+18", "nombre": "En Coca Cola Original 12UN 1.35L & Monster 1UN 473ML"}, {"sku": "4.95114E+18", "nombre": "Del Valle Néctar Manzana"}, {"sku": "4.12364E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "8.06343E+18", "nombre": "En Coca Cola Original 10UN 1.25L & Del Valle Naranja 6UN 950ML"}, {"sku": "1.60691E+18", "nombre": "Joya Ponche"}, {"sku": "8.98035E+16", "nombre": "En Powerade Maracuyá 18UN 1L"}, {"sku": "1.91223E+18", "nombre": "Familia Coca - Cola"}, {"sku": "1.43297E+18", "nombre": "Fresca Toronja"}, {"sku": "1.84446E+18", "nombre": "Dasani Sin Gas"}, {"sku": "5.73903E+18", "nombre": "Powerade Citrus Limón"}, {"sku": "7.46122E+18", "nombre": "Familia Coca - Cola"}, {"sku": "8.27418E+18", "nombre": "Topo Chico Sangría"}, {"sku": "6.14983E+18", "nombre": "Inca-Kola Dorada STV"}, {"sku": "2.75068E+18", "nombre": "Joya Toronja"}, {"sku": "2.47266E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "7.69831E+18", "nombre": "En Dasani (72UN 1.2L - 32UN 600ML)"}, {"sku": "5.55518E+18", "nombre": "En Dasani (24UN 1.2L - 16UN 600ML)"}, {"sku": "1.07449E+18", "nombre": "Benedictino Soda"}, {"sku": "7.2188E+18", "nombre": "Fanta Fresa"}, {"sku": "1.72941E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "8.56286E+18", "nombre": "En Del Valle Durazno 12UN 250ML & Powerade Manzana 6UN 1L"}, {"sku": "9.1276E+17", "nombre": "En Monster 2UN 473ML"}, {"sku": "9.04268E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "8.32295E+18", "nombre": "En Fanta Naranja 3UN 3L & Sprite 4UN 3L"}, {"sku": "4.47731E+18", "nombre": "En Monster Zero 2UN 473ML"}, {"sku": "7.624E+18", "nombre": "En Monster Mango Loco 2UN 473ML"}, {"sku": "5.03798E+18", "nombre": "En Monster Ultraparidese 2UN 473ML"}, {"sku": "6.96754E+18", "nombre": "Fanta Naranja"}, {"sku": "5.83308E+18", "nombre": "Fanta Uva"}, {"sku": "3.5275E+18", "nombre": "\"Saborizante de Leche Nesquik Chocolate en polvo 200 gr / Bolsa \""}, {"sku": "7.80821E+18", "nombre": "Dual Pack Coca Cola + Sprite F"}, {"sku": "5.28347E+18", "nombre": "Coca - Cola"}, {"sku": "1.68547E+18", "nombre": "Ciel Exprim Limón"}, {"sku": "7.8195E+18", "nombre": "Joya Ponche"}, {"sku": "2.60733E+18", "nombre": "Sprite Lima Limón"}, {"sku": "4.83584E+18", "nombre": "Fresca Toronja"}, {"sku": "2.33687E+18", "nombre": "Del Valle Fizz Surtida"}, {"sku": "6.85964E+17", "nombre": "Joya Piña"}, {"sku": "5.82496E+17", "nombre": "Powerade Mora Azul"}, {"sku": "4.80165E+18", "nombre": "Promo 17%: 10+2 Leche Chiqui 135Ml. Chocolate"}, {"sku": "9.06728E+18", "nombre": "AdeS Frutas Tropicales"}, {"sku": "8.42867E+18", "nombre": "En Del Valle Durazno (12UN 190ML - 12UN 250ML)"}, {"sku": "4.88804E+18", "nombre": "Dasani Purificada Sin Gas"}, {"sku": "5.7009E+18", "nombre": "En Coca Cola Original 9UN 3L"}, {"sku": "8.95908E+18", "nombre": "Fanta Piña"}, {"sku": "3.61973E+18", "nombre": "En Coca Cola Original 80UN 1.25L"}, {"sku": "7.34726E+18", "nombre": "Del Valle Néctar Manzana"}, {"sku": "9.07501E+18", "nombre": "Fanta Fresa"}, {"sku": "6.04879E+18", "nombre": "En Del Valle Naranja (3UN 1.75L - 6UN 950ML) & Fuze Tea Limón 6UN 1L"}, {"sku": "2.93328E+18", "nombre": "Aquarius Pera"}, {"sku": "6.88285E+18", "nombre": "Ina Cake Chispas Chocolate Paquete x2 x40 Gr."}, {"sku": "5.74447E+18", "nombre": "En Coca Cola Original 48UN 2L"}, {"sku": "6.54733E+18", "nombre": "Familia Coca - Cola"}, {"sku": "5.27288E+18", "nombre": "En Coca Cola Original 96UN 1.35L"}, {"sku": "6.63093E+18", "nombre": "En Coca Cola Original 48UN 3L"}, {"sku": "4.21684E+18", "nombre": "En Coca Cola Original 60UN 500ML"}, {"sku": "7.02051E+18", "nombre": "En Coca Cola Original 60UN 300ML"}, {"sku": "4.61676E+18", "nombre": "Shampoo Caprice Especializades Fuerza Vital Acti-Ceramidas+Complex 200 Ml / Bote"}, {"sku": "1.81196E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "5.88265E+18", "nombre": "Benedictino Agua Mineral Con Gas"}, {"sku": "4.78134E+18", "nombre": "Benedictino Agua Mineral"}, {"sku": "3.82154E+18", "nombre": "Helado Topsy Clásico Chocolate Tacho 10L"}, {"sku": "3.4342E+18", "nombre": "Topo Chico Agua Mineral"}, {"sku": "8.73207E+18", "nombre": "Ciel Exprim Gasificada Manzana"}, {"sku": "6.07802E+18", "nombre": "Ciel Saborizada Limón"}, {"sku": "5.56961E+18", "nombre": "Del Valle Durazno"}, {"sku": "8.82381E+17", "nombre": "En Flashlyte 3UN 625ML"}, {"sku": "1.69062E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.29751E+18", "nombre": "En Dasani 3UN 1.75L"}, {"sku": "2.3112E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "2.76341E+18", "nombre": "En Powerade Manzana (6UN 1L - 6UN 350ML) & Powerade Mora 6UN 350ML"}, {"sku": "1.4516E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "8.46069E+18", "nombre": "Cepita Naranja"}, {"sku": "1.31056E+18", "nombre": "En Dasani (6UN 1.2L - 8UN 600ML) & Del Valle Durazno 3UN 1L & Del Valle Naranja 6UN 250ML"}, {"sku": "8.78236E+18", "nombre": "En Dasani (6UN 500ML - 6UN 500ML)"}, {"sku": "3.30052E+18", "nombre": "Fresca Toronja"}, {"sku": "7.7298E+18", "nombre": "En Del Valle Naranja 12UN 950ML & Monster 1UN 473ML"}, {"sku": "4.15502E+18", "nombre": "En Fuze Tea Limón 12UN 550ML & Fuze Tea Mango 3UN 550ML"}, {"sku": "9.10592E+18", "nombre": "En Fuze Tea Limón 10UN 1L"}, {"sku": "7.24596E+18", "nombre": "Frutsi Mango"}, {"sku": "1.7973E+17", "nombre": "Familia Coca - Cola"}, {"sku": "2.13463E+18", "nombre": "En Del Valle Durazno 6UN 1L & Fuze Tea Limón 6UN 1L"}, {"sku": "7.85954E+18", "nombre": "Fanta Uva"}, {"sku": "8.53971E+18", "nombre": "Predator Energy Green Lima Limón"}, {"sku": "1.6076E+18", "nombre": "Coca - Cola Light"}, {"sku": "2.41223E+18", "nombre": "Topo Chico Agua Mineral"}, {"sku": "3.17947E+18", "nombre": "Familia Coca - Cola"}, {"sku": "5.91762E+18", "nombre": "Familia Coca - Cola"}, {"sku": "9.51078E+16", "nombre": "Del Valle Reserva Acaí"}, {"sku": "2.25294E+18", "nombre": "En Coca Cola Original 72UN 300ML"}, {"sku": "3.292E+18", "nombre": "Coca - Cola"}, {"sku": "6.60877E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "5.84038E+18", "nombre": "En Powerade Manzana 36UN 600ML"}, {"sku": "4.14294E+18", "nombre": "Valle Frut Mango"}, {"sku": "5.68528E+17", "nombre": "En Inca Kola 60UN 900ML"}, {"sku": "8.83094E+18", "nombre": "Chocolate Bambini Magic Mix Display x 6 120Gr."}, {"sku": "2.54706E+17", "nombre": "Chocolate Snickers Barra 52 Gr."}, {"sku": "7.95473E+18", "nombre": "Joya Durazno"}, {"sku": "4.13388E+18", "nombre": "Ciel Exprim Limón"}, {"sku": "9.07854E+18", "nombre": "Joya Ponche"}, {"sku": "5.39637E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "3.07378E+18", "nombre": "Chocolate Choco Milk sobre en polvo 18 Gr 20 Pzas Display"}, {"sku": "3.42503E+18", "nombre": "En Powerade Mora 6UN 350ML"}, {"sku": "8.41803E+18", "nombre": "Ciel Exprim Limón"}, {"sku": "4.75458E+18", "nombre": "Del Valle Surtida"}, {"sku": "7.81602E+18", "nombre": "Joya Piña"}, {"sku": "7.7722E+18", "nombre": "DualPack Benedictino + Benedictino"}, {"sku": "6.73275E+18", "nombre": "Fresca Surtida"}, {"sku": "3.52957E+18", "nombre": "En Coca Cola Original 6UN 3L & Fanta Uva 6UN 250ML"}, {"sku": "6.98924E+18", "nombre": "Del Valle Fresh Naranja Verde"}, {"sku": "1.87286E+18", "nombre": "Santa Clara Leche Entera"}, {"sku": "7.84439E+18", "nombre": "Ciel Mineralizada Agua Mineral"}, {"sku": "3.00876E+18", "nombre": "Joya"}, {"sku": "1.57788E+18", "nombre": "Fanta Fresa"}, {"sku": "6.42188E+18", "nombre": "Topo Chico Agua Mineral"}, {"sku": "7.67449E+18", "nombre": "Promo 20%: 8+2 Leche Saborizada Chocolate 200Ml."}, {"sku": "2.83859E+18", "nombre": "Promo 15%: 43 Leche Saborizada (10 Frutilla + 10 Chocolate) 135Ml."}, {"sku": "7.43548E+17", "nombre": "Powerade Jugo Lima Limón"}, {"sku": "6.63611E+18", "nombre": "Fanta Naranja"}, {"sku": "6.55836E+18", "nombre": "Del Valle y Nada Limón Pepino"}, {"sku": "6.83623E+18", "nombre": "Familia Coca - Cola"}, {"sku": "6.07278E+18", "nombre": "En Del Valle Naranja (6UN 950ML - 3UN 1.75L)"}, {"sku": "8.00769E+18", "nombre": "Fanta Fresa"}, {"sku": "7.60066E+18", "nombre": "En Monster 24UN 473ML"}, {"sku": "8.90463E+18", "nombre": "Valle Frut Citrus Punch"}, {"sku": "8.67923E+18", "nombre": "Familia Coca - Cola"}, {"sku": "6.32962E+18", "nombre": "Familia Coca - Cola"}, {"sku": "2.45121E+18", "nombre": "AdeS Frutas Tropicales"}, {"sku": "1.37369E+18", "nombre": "Cepita Naranja"}, {"sku": "4.66393E+18", "nombre": "Coca - Cola"}, {"sku": "5.07974E+18", "nombre": "En Coca Cola Original 10UN 1.25L & Monster 1UN 473ML"}, {"sku": "6.3273E+18", "nombre": "En Dasani 6UN 1.75L"}, {"sku": "1.24585E+17", "nombre": "Monster Energy Ultra Watermelon"}, {"sku": "2.49135E+18", "nombre": "AdeS Naranja"}, {"sku": "8.11572E+18", "nombre": "Familia Coca - Cola"}, {"sku": "2.0312E+18", "nombre": "Fioravanti Fresa"}, {"sku": "4.06503E+18", "nombre": "Coca - Cola"}, {"sku": "3.07518E+18", "nombre": "En Powerade Manzana 30UN 1L"}, {"sku": "1.03908E+18", "nombre": "En Inca Kola 60UN 900ML"}, {"sku": "7.37061E+18", "nombre": "En Coca Cola Original (12UN 300ML - 12UN 200ML)"}, {"sku": "4.62757E+18", "nombre": "En Coca Cola Original 36UN 1.35L"}, {"sku": "7.80811E+18", "nombre": "En Coca Cola Original 6UN 2L & Fanta Uva 3UN 500ML"}, {"sku": "2.9928E+18", "nombre": "Valle Frut Limón"}, {"sku": "5.08E+18", "nombre": "Sprite Lima Limón"}, {"sku": "2.70736E+18", "nombre": "Coca - Cola Zero"}, {"sku": "5.72895E+18", "nombre": "En Fanta Uva 6UN 250ML & Inca Kola 12UN 900ML"}, {"sku": "6.15272E+18", "nombre": "En Powerade Frutas 3UN 1L & Powerade Mora 6UN 350ML"}, {"sku": "4.49548E+17", "nombre": "En Fanta Naranja 4UN 1.35L & Fioravanti Fresa 4UN 1.35L & Sprite 4UN 1.35L"}, {"sku": "6.67044E+18", "nombre": "En Inca Kola 15UN 900ML"}, {"sku": "8.33578E+18", "nombre": "En Dasani 12UN 1.2L & Fury 6UN 500ML"}, {"sku": "5.85066E+18", "nombre": "Familia Coca - Cola"}, {"sku": "8.52032E+18", "nombre": "Aquarius Pera"}, {"sku": "7.64097E+18", "nombre": "Aquarius Pomelo Rosado"}, {"sku": "6.86424E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "2.15409E+18", "nombre": "Coca-Cola Zero Cola"}, {"sku": "6.90773E+18", "nombre": "Cepita Multifruta"}, {"sku": "5.30956E+18", "nombre": "Coca - Cola Life"}, {"sku": "8.42152E+18", "nombre": "Coca - Cola Zero"}, {"sku": "1.5219E+18", "nombre": "Sprite Lima Limón"}, {"sku": "7.80756E+18", "nombre": "Coca - Cola"}, {"sku": "3.93937E+18", "nombre": "Fanta Naranja"}, {"sku": "7.13669E+18", "nombre": "En Monster 1UN 473ML"}, {"sku": "3.13201E+18", "nombre": "Sprite Lima Limón"}, {"sku": "3.40009E+18", "nombre": "En Coca Cola Original 6UN 1.35L & Sprite 12UN 1.35L"}, {"sku": "2.8153E+18", "nombre": "En Coca Cola Original 9UN 2L"}, {"sku": "7.67112E+18", "nombre": "En Powerade Frutas 6UN 1L"}, {"sku": "5.15701E+18", "nombre": "En Monster Ultraparidese 1UN 473ML"}, {"sku": "4.48077E+18", "nombre": "En Monster Ultra Zero 1UN 473ML"}, {"sku": "6.2235E+18", "nombre": "En Monster Zero 1UN 473ML"}, {"sku": "6.38002E+18", "nombre": "En Coca Cola Original 10UN 200ML & Fanta Naranja 6UN 200ML & Inca Kola 6UN 200ML & Sprite 6UN 200ML"}, {"sku": "7.48172E+18", "nombre": "Promo 16%: Leche Saborizada (6 Chocolate + 6 Frutilla) 135Ml."}, {"sku": "8.2364E+18", "nombre": "Frutsi Manzana"}, {"sku": "8.32613E+18", "nombre": "Powerade Mango"}, {"sku": "2.09045E+18", "nombre": "Sprite Lima Limón"}, {"sku": "6.05122E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.5179E+18", "nombre": "Promo 20%: Leche Saborizada (11 Frutilla+10 Chocolate) 200Ml."}, {"sku": "6.90499E+18", "nombre": "Dasani Saborizada Limón Con Gas"}, {"sku": "6.11226E+16", "nombre": "Fuze Tea Durazno"}, {"sku": "3.65988E+18", "nombre": "Promo 20%: 8 Leches Chocolate Gratis 2 Leches Frutilla de 200Gr."}, {"sku": "8.30194E+18", "nombre": "En Del Valle Durazno 6UN 1L"}, {"sku": "6.03655E+18", "nombre": "Familia Coca - Cola"}, {"sku": "1.03519E+18", "nombre": "En Coca Cola Original 72UN 2L"}, {"sku": "3.71165E+18", "nombre": "Coca - Cola Zero"}, {"sku": "8.62411E+17", "nombre": "En Del Valle Naranja 18UN 950ML"}, {"sku": "2.13042E+18", "nombre": "AdeS Durazno"}, {"sku": "5.50053E+17", "nombre": "AdeS Naranja"}, {"sku": "7.26369E+18", "nombre": "En Powerade Manzana 120UN 600ML"}, {"sku": "2.46427E+18", "nombre": "En Coca Cola Original 96UN 1L"}, {"sku": "5.64416E+18", "nombre": "En Monster Ultra Zero 24UN 473ML"}, {"sku": "7.73583E+18", "nombre": "Coca - Cola"}, {"sku": "5.14833E+18", "nombre": "Del Valle Fizz Naranja"}, {"sku": "6.56389E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "8.69016E+18", "nombre": "Coca - Cola Zero"}, {"sku": "8.70165E+18", "nombre": "En Del Valle Naranja 7UN 1.75L"}, {"sku": "3.23958E+18", "nombre": "En Del Valle Durazno 7UN 1L"}, {"sku": "7.02278E+18", "nombre": "Coca - Cola"}, {"sku": "3.23709E+18", "nombre": "Powerade Fruta Tropical"}, {"sku": "6.7038E+17", "nombre": "Del Valle Néctar Manzana"}, {"sku": "8.91269E+18", "nombre": "Joya Durazno"}, {"sku": "3.68658E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "1.30485E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "3.80819E+18", "nombre": "Ina Brownie Chocolate 52 Gr."}, {"sku": "2.02482E+18", "nombre": "Fanta Naranja"}, {"sku": "6.46101E+17", "nombre": "Coca - Cola Light"}, {"sku": "3.88275E+18", "nombre": "Sprite Lima Limón"}, {"sku": "2.15494E+18", "nombre": "En Coca Cola Original 18UN 1.25L"}, {"sku": "1.3349E+17", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "8.93841E+18", "nombre": "Fanta Naranja"}, {"sku": "5.18962E+18", "nombre": "Dasani Saborizada Limón Con Gas"}, {"sku": "6.25988E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "2.97273E+18", "nombre": "Familia Coca - Cola"}, {"sku": "5.14759E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "6.914E+17", "nombre": "Inacake con Chispas de Chocolate 80 G"}, {"sku": "1.90956E+18", "nombre": "Coca - Cola Zero"}, {"sku": "7.76235E+18", "nombre": "Coca-Cola TA"}, {"sku": "1.4076E+18", "nombre": "En Coca Cola Original 18UN 500ML"}, {"sku": "4.97935E+18", "nombre": "En Coca Cola Original 12UN 300ML & Sprite 12UN 300ML"}, {"sku": "3.21653E+18", "nombre": "En Powerade Frutas 12UN 350ML"}, {"sku": "4.16379E+18", "nombre": "Fuze Tea Mango Manzanilla"}, {"sku": "4.67684E+18", "nombre": "Cepita Fresh Pomelo"}, {"sku": "5.62605E+18", "nombre": "Monster Energy Zero Sugar"}, {"sku": "7.4092E+18", "nombre": "Monster Energy Ultra Paradise"}, {"sku": "6.75197E+18", "nombre": "Coca - Cola Zero"}, {"sku": "5.77291E+18", "nombre": "Fanta Naranja"}, {"sku": "7.19595E+17", "nombre": "En Fanta Naranja 6UN 1.35L & Fanta Uva 6UN 1.35L"}, {"sku": "2.5914E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.50271E+17", "nombre": "Familia Coca - Cola"}, {"sku": "1.75241E+18", "nombre": "Topo Chico Sangría"}, {"sku": "6.23356E+18", "nombre": "En Fanta Naranja 6UN 500ML & Fioravanti Fresa 6UN 500ML & Inca Kola 6UN 500ML & Sprite 6UN 500ML"}, {"sku": "1.56211E+17", "nombre": "En Powerade Maracuyá 6UN 1L"}, {"sku": "8.58253E+18", "nombre": "Leche Saborizada Chocolate 1Lt."}, {"sku": "2.84366E+18", "nombre": "Familia Coca - Cola"}, {"sku": "5.53207E+17", "nombre": "Fanta Naranja"}, {"sku": "8.99392E+18", "nombre": "En Powerade Frutas 6UN 350ML & Powerade Mora 3UN 1L"}, {"sku": "2.23286E+15", "nombre": "Aquarius Naranja"}, {"sku": "1.85646E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "8.7137E+18", "nombre": "Powerade Fit Uva Menta"}, {"sku": "5.06091E+18", "nombre": "Familia Coca - Cola"}, {"sku": "4.89644E+18", "nombre": "Fanta Naranja"}, {"sku": "2.06598E+18", "nombre": "Coca - Cola Light"}, {"sku": "3.30287E+18", "nombre": "Coca - Cola Zero"}, {"sku": "5.85502E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "9.08418E+18", "nombre": "Promo 20%: Leche Saborizada (4 Frutilla+4 Chocolate) 200Ml."}, {"sku": "4.68645E+18", "nombre": "Suavizante P/Ropa Suavitel Fresca Primavera 850 Ml / Bote"}, {"sku": "1.83087E+18", "nombre": "Coca - Cola Zero"}, {"sku": "8.66778E+18", "nombre": "Joya Manzana"}, {"sku": "2.95868E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "3.53246E+18", "nombre": "Fanta Naranja"}, {"sku": "8.09703E+18", "nombre": "Powerade Manzana Clear"}, {"sku": "8.71182E+18", "nombre": "Promo 18%: Leche Saborizada (48 Frutilla + 48 Chocolate) 200Ml."}, {"sku": "5.51094E+18", "nombre": "Fresca Toronja"}, {"sku": "6.27254E+17", "nombre": "En Fanta Naranja 12UN 300ML & Fioravanti Fresa 12UN 300ML & Inca Kola 12UN 300ML & Sprite 12UN 300ML"}, {"sku": "7.91452E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.20514E+18", "nombre": "Coca - Cola"}, {"sku": "3.59887E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "2.20819E+18", "nombre": "En Sprite 12UN 250ML"}, {"sku": "7.17033E+18", "nombre": "Santa Clara Leche Light"}, {"sku": "8.57136E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "6.51554E+18", "nombre": "En Powerade Mora 6UN 1L"}, {"sku": "6.16742E+16", "nombre": "Santa Clara Leche Chocolate"}, {"sku": "1.8108E+18", "nombre": "Joya Uva"}, {"sku": "8.17289E+18", "nombre": "En Powerade Manzana 6UN 350ML & Powerade Mora 6UN 1L"}, {"sku": "6.95757E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.92881E+18", "nombre": "En Powerade Manzana 3UN 1L"}, {"sku": "2.32082E+18", "nombre": "Joya Fresa"}, {"sku": "3.29184E+17", "nombre": "Del Valle Néctar Manzana"}, {"sku": "1.53307E+18", "nombre": "Fresca Toronja"}, {"sku": "6.89733E+18", "nombre": "Familia Coca - Cola"}, {"sku": "6.47756E+18", "nombre": "Monster Energy Mango Loco 473 ml"}, {"sku": "5.80113E+18", "nombre": "En Dasani (6UN 250ML - 6UN 250ML) & Del Valle Durazno 12UN 190ML"}, {"sku": "5.48858E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.47926E+18", "nombre": "En Fanta Naranja 6UN 500ML & Fanta Uva 6UN 500ML"}, {"sku": "8.94583E+18", "nombre": "Coca - Cola"}, {"sku": "3.75858E+18", "nombre": "Del Valle Guayaba"}, {"sku": "2.10823E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "4.32993E+18", "nombre": "Familia Coca - Cola"}, {"sku": "4.13405E+17", "nombre": "Familia Coca - Cola"}, {"sku": "1.2007E+18", "nombre": "Coca - Cola Zero"}, {"sku": "8.32968E+18", "nombre": "Coca - Cola Light"}, {"sku": "1.84655E+18", "nombre": "En Powerade Mora 12UN 350ML"}, {"sku": "2.81702E+18", "nombre": "En Dasani 64UN 600ML"}, {"sku": "5.71383E+18", "nombre": "En Fury 6UN 500ML & Fuze Tea Limón 6UN 1L"}, {"sku": "4.13024E+18", "nombre": "Coca - Cola"}, {"sku": "3.20079E+18", "nombre": "Dual Pack Coca Cola + Sprite F"}, {"sku": "1.01991E+18", "nombre": "Coca - Cola"}, {"sku": "2.48623E+16", "nombre": "Coca - Cola"}, {"sku": "1.32714E+18", "nombre": "Del Valle 100% Jugo Naranja"}, {"sku": "4.32634E+18", "nombre": "Coca - Cola"}, {"sku": "6.07155E+18", "nombre": "Fuze Tea Verde Limón"}, {"sku": "7.26973E+18", "nombre": "En Del Valle Durazno 6UN 250ML"}, {"sku": "4.18068E+18", "nombre": "En Del Valle Naranja 6UN 250ML"}, {"sku": "5.37769E+18", "nombre": "Coca-Cola E"}, {"sku": "2.33735E+18", "nombre": "En Flashlyte 3UN 625ML"}, {"sku": "3.01682E+18", "nombre": "Del Valle Naranja"}, {"sku": "8.18659E+18", "nombre": "Helado Torta Frutilla-Cubierta Chocolate Caja 1109Ml."}, {"sku": "3.78227E+18", "nombre": "Coca - Cola Zero"}, {"sku": "6.95486E+18", "nombre": "En Coca Cola Original 27UN 2L"}, {"sku": "5.18989E+18", "nombre": "Coca - Cola"}, {"sku": "8.39578E+18", "nombre": "Sprite Lima Limón"}, {"sku": "3.13761E+18", "nombre": "En Del Valle Manzana 2UN 950ML & Del Valle Naranja 12UN 950ML"}, {"sku": "5.08171E+18", "nombre": "Promo: Leche Saborizada 4 Chocolate Gratis 1 de Frutilla 750Ml."}, {"sku": "1.3817E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.67146E+17", "nombre": "En Coca Cola Original 10UN 1.25L & Powerade Manzana 3UN 1L"}, {"sku": "1.61381E+18", "nombre": "Fanta Naranja"}, {"sku": "2.97799E+17", "nombre": "Del Valle Néctar Manzana"}, {"sku": "5.18441E+18", "nombre": "Coca - Cola Light"}, {"sku": "1.01933E+18", "nombre": "Fioravanti Manzana Roja"}, {"sku": "7.93413E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.18255E+18", "nombre": "Fioravanti Fresa"}, {"sku": "4.27876E+18", "nombre": "En Dasani (16UN 600ML - 6UN 300ML)"}, {"sku": "6.84872E+18", "nombre": "En Coca Cola Original 36UN 300ML"}, {"sku": "8.52211E+18", "nombre": "Fanta Naranja"}, {"sku": "3.24008E+18", "nombre": "En Powerade Mora 120UN 350ML"}, {"sku": "8.91405E+18", "nombre": "En Powerade Manzana 72UN 1L"}, {"sku": "1.39972E+18", "nombre": "En Powerade Manzana 120UN 350ML"}, {"sku": "3.38797E+18", "nombre": "En Powerade Frutas 120UN 350ML"}, {"sku": "4.79207E+18", "nombre": "Promo: Leche Saborizada (28 Chocolate+20 Frutilla) 135Ml"}, {"sku": "4.07932E+18", "nombre": "En Coca Cola Original 6UN 1.25L & Fury 3UN 500ML"}, {"sku": "8.72695E+17", "nombre": "En Powerade Frutas (6UN 350ML - 3UN 1L) & Powerade Manzana (6UN 1L - 6UN 350ML)"}, {"sku": "8.51546E+18", "nombre": "Fresca Toronja"}, {"sku": "5.38116E+18", "nombre": "Coca - Cola Light"}, {"sku": "6.49682E+18", "nombre": "En Dasani 192UN 600ML"}, {"sku": "6.48558E+17", "nombre": "Promo 20%: Leche Saborizada (5 Frutilla+5 Chocolate) 200Ml."}, {"sku": "8.5074E+18", "nombre": "Powerade Mora Azul"}, {"sku": "3.89356E+17", "nombre": "Del Valle Durazno"}, {"sku": "6.28645E+18", "nombre": "Santa Clara Leche Cappuccino"}, {"sku": "5.9029E+17", "nombre": "Fanta Uva"}, {"sku": "2.33198E+18", "nombre": "Joya Manzana - Durazno"}, {"sku": "5.11153E+18", "nombre": "Aquarius Pomelo"}, {"sku": "4.62832E+17", "nombre": "Familia Coca - Cola"}, {"sku": "1.69689E+18", "nombre": "Fioravanti Manzana Roja"}, {"sku": "5.02938E+18", "nombre": "Santa Clara Leche Deslactosada Semi"}, {"sku": "6.14515E+18", "nombre": "En Del Valle Manzana 24UN 950ML"}, {"sku": "7.95603E+18", "nombre": "Del Valle Durazno"}, {"sku": "6.12402E+18", "nombre": "Coca - Cola Life"}, {"sku": "1.92109E+18", "nombre": "En Powerade Frutas 12UN 350ML & Powerade Mora 6UN 1L"}, {"sku": "1.08755E+17", "nombre": "En Powerade Maracuyá 21UN 1L"}, {"sku": "7.69778E+18", "nombre": "En Coca Cola Original (6UN 1.25L - 6UN 1L)"}, {"sku": "8.80951E+18", "nombre": "Inca-Kola Dorada STV"}, {"sku": "8.36825E+18", "nombre": "Cepita Fresh Pomelo"}, {"sku": "3.11227E+18", "nombre": "Fanta Naranja"}, {"sku": "8.94579E+17", "nombre": "Pulpy Sábila"}, {"sku": "2.83022E+16", "nombre": "Sprite Harmony"}, {"sku": "4.77431E+18", "nombre": "Fanta Naranja"}, {"sku": "6.80233E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "1.44656E+18", "nombre": "3X2 Frozen Duo Leche Chocolate 100Ml."}, {"sku": "4.14302E+18", "nombre": "Familia Coca - Cola"}, {"sku": "7.90655E+18", "nombre": "Del Valle Fizz Limón"}, {"sku": "7.96981E+18", "nombre": "Fanta Piña"}, {"sku": "8.92257E+17", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "5.99532E+18", "nombre": "Joya Manzana"}, {"sku": "7.17921E+18", "nombre": "Helado Frozen Duo Vainilla Chocolate (1X24U) 100ml"}, {"sku": "7.49916E+18", "nombre": "Del Valle Naranja"}, {"sku": "4.4215E+18", "nombre": "Familia Coca - Cola"}, {"sku": "1.78621E+18", "nombre": "En Coca Cola Original (6UN 1L - 6UN 1.25L)"}, {"sku": "7.74318E+18", "nombre": "En Powerade Mora 9UN 1L"}, {"sku": "6.75638E+18", "nombre": "Sprite Harmony"}, {"sku": "2.01705E+17", "nombre": "Fanta Naranja"}, {"sku": "3.79089E+18", "nombre": "Promo 16%: Leche Saborizada (6 Chocolate + 5 Frutilla) 135Ml."}, {"sku": "7.73734E+18", "nombre": "Coca - Cola Light"}, {"sku": "7.24402E+18", "nombre": "Promo: 12+2 Leche Saborizada de Chocolate 200 Ml."}, {"sku": "2.73211E+18", "nombre": "En Dasani 180UN 1.2L"}, {"sku": "4.20341E+18", "nombre": "En Dasani (6UN 500ML - 6UN 500ML - 64UN 600ML)"}, {"sku": "5.41174E+18", "nombre": "Del Valle Fizz Limón"}, {"sku": "9.95486E+17", "nombre": "Promo 20%: Leche Saborizada (5 Chocolate+4 Frutilla) 135Ml."}, {"sku": "5.40598E+18", "nombre": "Del Valle Durazno"}, {"sku": "1.88022E+18", "nombre": "En Fanta Naranja 2UN 1.35L & Fanta Uva 2UN 1.35L & Sprite 2UN 1.35L"}, {"sku": "4.89162E+18", "nombre": "En Powerade Frutas 36UN 350ML"}, {"sku": "8.0584E+18", "nombre": "En Powerade Mora 36UN 350ML"}, {"sku": "2.76035E+18", "nombre": "En Powerade Manzana 36UN 350ML"}, {"sku": "7.57227E+18", "nombre": "Coca-Cola TA"}, {"sku": "5.03306E+18", "nombre": "Coca - Cola Zero"}, {"sku": "3.41729E+18", "nombre": "En Coca Cola Original 9UN 2L & Monster 2UN 473ML"}, {"sku": "1.67771E+18", "nombre": "Joya Toronja"}, {"sku": "4.42453E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "4.05528E+17", "nombre": "En Del Valle Manzana 24UN 950ML & Del Valle Naranja 24UN 950ML"}, {"sku": "5.28004E+18", "nombre": "Coca - Cola"}, {"sku": "2.41011E+18", "nombre": "En Dasani 60UN 1.2L"}, {"sku": "7.97504E+17", "nombre": "Fanta"}, {"sku": "1.71858E+18", "nombre": "Sprite Lima Limón"}, {"sku": "3.20547E+18", "nombre": "En Monster Mango Loco 1UN 473ML"}, {"sku": "4.37767E+18", "nombre": "En Del Valle Durazno (6UN 250ML - 3UN 1L)"}, {"sku": "5.13757E+18", "nombre": "En Powerade Uva 6UN 1L"}, {"sku": "1.44534E+18", "nombre": "Coca - Cola Light"}, {"sku": "2.47252E+18", "nombre": "Fresca Toronja"}, {"sku": "4.90427E+18", "nombre": "Dual Pack Aquarius Pom.Rosado + Aquarius Pom. Rosado"}, {"sku": "3.25501E+18", "nombre": "Sidral Mundet Manzana - Durazno"}, {"sku": "3.23077E+18", "nombre": "En Dasani (180UN 1.2L - 6UN 500ML - 6UN 500ML)"}, {"sku": "3.79781E+18", "nombre": "En Dasani (6UN 500ML - 192UN 600ML - 6UN 500ML)"}, {"sku": "2.26927E+18", "nombre": "Fanta Uva"}, {"sku": "2.28477E+18", "nombre": "Fresca Toronja"}, {"sku": "3.78434E+18", "nombre": "Promo 14%: 3 Leches Saborizadas Chocolate Gratis Leches (3Frutilla+1Chocolate) 750Ml."}, {"sku": "2.83662E+18", "nombre": "En Fanta Naranja 6UN 250ML & Fanta Uva 6UN 250ML"}, {"sku": "1.48273E+18", "nombre": "En Powerade Frutas 6UN 350ML & Powerade Manzana 6UN 350ML & Powerade Mora 6UN 1L"}, {"sku": "1.48502E+18", "nombre": "Familia Coca - Cola"}, {"sku": "2.46837E+18", "nombre": "Monster Energy Ultra Zero Sugar"}, {"sku": "7.75578E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "4.48678E+18", "nombre": "En Coca Cola Original 5UN 1.25L & Fury 3UN 500ML"}, {"sku": "7.3345E+17", "nombre": "Powerade Mango"}, {"sku": "2.51659E+18", "nombre": "Del Valle y Nada Coco"}, {"sku": "7.78983E+18", "nombre": "En Fanta Naranja 4UN 2L & Inca Kola 6UN 1L & Sprite 5UN 2L"}, {"sku": "3.5115E+18", "nombre": "Del Valle Mango"}, {"sku": "7.38737E+18", "nombre": "Santa Clara Leche Entera"}, {"sku": "3.55889E+16", "nombre": "En Powerade Frutas 6UN 600ML & Powerade Manzana 6UN 600ML & Powerade Uva 6UN 1L"}, {"sku": "2.34983E+17", "nombre": "Dasani Saborizada Manzana Con Gas"}, {"sku": "4.58056E+18", "nombre": "En Powerade Mora 120UN 600ML"}, {"sku": "3.27037E+18", "nombre": "En Powerade Frutas 120UN 600ML"}, {"sku": "4.32697E+18", "nombre": "En Powerade Uva 120UN 600ML"}, {"sku": "6.51152E+17", "nombre": "Familia Coca - Cola"}, {"sku": "2.22309E+18", "nombre": "Fresca Toronja"}, {"sku": "6.30472E+18", "nombre": "En Powerade Frutas (6UN 1L - 6UN 350ML) & Powerade Manzana (6UN 350ML - 6UN 1L) & Powerade Mora (6UN 1L - 6UN 350ML)"}, {"sku": "9.9546E+17", "nombre": "Fanta Naranja"}, {"sku": "3.46943E+18", "nombre": "En Fuze Tea Limón 6UN 1L & Fuze Tea Mango 3UN 1L"}, {"sku": "2.5567E+18", "nombre": "Coca-Cola"}, {"sku": "4.40674E+18", "nombre": "Coca - Cola"}, {"sku": "5.9054E+18", "nombre": "Chocolate Choco Milk en Polvo 160 gr / Bolsa"}, {"sku": "4.73563E+18", "nombre": "Coca-Cola"}, {"sku": "9.10536E+18", "nombre": "Fanta Zero Naranja"}, {"sku": "5.58122E+17", "nombre": "Coca-Cola Zero Cola"}, {"sku": "6.79568E+18", "nombre": "Sprite Zero Lima-Limón"}, {"sku": "2.06376E+18", "nombre": "Promo 17%: Leche Saborizada (8 Chocolate+ 6 Frutilla) 200Ml."}, {"sku": "1.84866E+18", "nombre": "Coca - Cola"}, {"sku": "8.23329E+17", "nombre": "Ciel Saborizada Jamaica"}, {"sku": "6.8083E+18", "nombre": "Monster Energy Lo Carb"}, {"sku": "2.78089E+18", "nombre": "Santa Clara Yogurt Batido Guayaba"}, {"sku": "1.9417E+18", "nombre": "Fresca Surtida"}, {"sku": "1.0366E+18", "nombre": "Joya Uva"}, {"sku": "4.25689E+18", "nombre": "Del Valle Néctar Mango"}, {"sku": "8.33145E+18", "nombre": "Del Valle Néctar Durazno"}, {"sku": "6.63139E+18", "nombre": "Del Valle Mango"}, {"sku": "4.92228E+18", "nombre": "Fresca Toronja"}, {"sku": "5.36459E+18", "nombre": "En Monster Mango Loco 4UN 473ML & Monster 8UN 473ML & Monster Ultra Zero 4UN 473ML & Monster Ultraparidese 4UN 473ML & Monster Zero 4UN 473ML"}, {"sku": "6.77569E+18", "nombre": "Promo 20%: Leche Saborizada (6 Frutilla + 8 Chocolate) 200Gr."}, {"sku": "9.35731E+17", "nombre": "Dual Pack Coca Cola + Benedictino"}, {"sku": "4.76509E+18", "nombre": "En Coca Cola Original (12UN 500ML - 12UN 300ML - 12UN 300ML)"}, {"sku": "5.84404E+18", "nombre": "En Monster Mango Loco 4UN 473ML & Monster 8UN 473ML & Monster Ultra Zero 4UN 473ML & Monster Ultraparidese 4UN 473ML & Monster Zero 4UN 473ML"}, {"sku": "3.3283E+18", "nombre": "Sprite Lima Limón"}, {"sku": "8.02416E+18", "nombre": "En Coca Cola Original 36UN 300ML"}, {"sku": "2.12809E+18", "nombre": "Del Valle Nutriforte Mango"}, {"sku": "7.63081E+18", "nombre": "Sprite Lima Limón"}, {"sku": "4.25578E+18", "nombre": "Promo 18%: Leche Saborizada (28 Chocolate+16 Frutilla) 200Ml."}, {"sku": "9.04357E+18", "nombre": "En Powerade Frutas 72UN 1L"}, {"sku": "2.5741E+18", "nombre": "En Powerade Uva 72UN 1L"}, {"sku": "9.09148E+18", "nombre": "En Powerade Maracuyá 72UN 1L"}, {"sku": "8.70316E+18", "nombre": "Familia Coca - Cola"}, {"sku": "2.03789E+18", "nombre": "En Powerade Maracuyá 66UN 1L"}, {"sku": "9.1305E+18", "nombre": "En Powerade Frutas 66UN 1L"}, {"sku": "2.13357E+18", "nombre": "En Powerade Mora 66UN 1L"}, {"sku": "4.22282E+18", "nombre": "En Powerade Manzana 66UN 1L"}, {"sku": "8.27626E+18", "nombre": "Fuze Tea Limón"}, {"sku": "1.49486E+18", "nombre": "Delaware Punch Uva"}, {"sku": "7.59871E+18", "nombre": "En Monster Mango Loco 1UN 473ML & Monster 1UN 473ML & Monster Ultra Zero 1UN 473ML & Monster Ultraparidese 1UN 473ML & Monster Zero 1UN 473ML"}, {"sku": "5.52523E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.90954E+17", "nombre": "Joya Manzana - Durazno"}, {"sku": "2.61083E+18", "nombre": "Dual Pack Coca Cola + Fanta Naranja"}, {"sku": "9.92818E+17", "nombre": "Dual Pack Coca Cola + Sprite F"}, {"sku": "8.96487E+18", "nombre": "En Powerade Mora 18UN 1L"}, {"sku": "6.33284E+18", "nombre": "En Powerade Manzana 18UN 1L"}, {"sku": "2.24729E+18", "nombre": "En Powerade Frutas 18UN 1L"}, {"sku": "8.89638E+17", "nombre": "En Coca Cola Original 24UN 300ML & Dasani 8UN 600ML & Fuze Tea Limón 6UN 550ML"}, {"sku": "4.56846E+18", "nombre": "Dasani Sin Gas Multipack"}, {"sku": "3.23754E+18", "nombre": "Promo 20%: Leche Saborizada (24 Frutilla+24 Chocolate) 135Ml."}, {"sku": "1.72859E+18", "nombre": "En Del Valle Durazno 6UN 250ML & Powerade Manzana 3UN 1L"}, {"sku": "6.08943E+18", "nombre": "Coca - Cola Light"}, {"sku": "4.38024E+18", "nombre": "En Inca Kola 72UN 300ML"}, {"sku": "7.66816E+18", "nombre": "Powerade Citrus Naranja"}, {"sku": "1.06508E+17", "nombre": "Santa Clara Leche Semidescremada"}, {"sku": "4.93658E+18", "nombre": "Santa Clara Leche Entera"}, {"sku": "7.17953E+18", "nombre": "Santa Clara Leche Deslactosada Semi"}, {"sku": "8.80717E+18", "nombre": "Fanta Uva"}, {"sku": "3.34661E+18", "nombre": "Fanta Naranja"}, {"sku": "4.24672E+18", "nombre": "Fioravanti Manzana Roja"}, {"sku": "8.14981E+18", "nombre": "En Inca Kola 24UN 300ML"}, {"sku": "6.05771E+17", "nombre": "Familia Coca - Cola"}, {"sku": "7.15855E+18", "nombre": "VUALA SORPRESA CHOCOLATE 60 G"}, {"sku": "3.83415E+18", "nombre": "Joya"}, {"sku": "1.26718E+18", "nombre": "Noggy Chocolate Pouch 36 x 151Gr"}, {"sku": "3.84393E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "3.39729E+17", "nombre": "Del Valle Piña"}, {"sku": "2.28605E+18", "nombre": "Fanta Mandarina"}, {"sku": "1.68703E+18", "nombre": "Noggy Chocolate Cajita 20 x 84Gr"}, {"sku": "3.48292E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "4.44436E+18", "nombre": "Topo Chico Hard Seltzer Fresa-Guayaba"}, {"sku": "8.64401E+18", "nombre": "Topo Chico Hard Seltzer Margarita Fresa-Jamaica"}, {"sku": "9.12251E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "5.49541E+18", "nombre": "Coca - Cola Light"}, {"sku": "5.08482E+18", "nombre": "Valle Frut Manzana"}, {"sku": "5.23089E+18", "nombre": "Coca - Cola"}, {"sku": "6.4596E+18", "nombre": "Fuze Tea Negro Lima"}, {"sku": "8.67727E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.71339E+18", "nombre": "En Powerade Manzana 9UN 1L"}, {"sku": "3.45065E+18", "nombre": "Del Valle Guayaba"}, {"sku": "8.27304E+18", "nombre": "En Powerade Uva 3UN 1L"}, {"sku": "8.93271E+18", "nombre": "Fioravanti Manzana Roja"}, {"sku": "1.7654E+18", "nombre": "Monster Energy Original"}, {"sku": "8.64453E+18", "nombre": "Del Valle Fizz Surtida"}, {"sku": "1.95898E+18", "nombre": "En Powerade Uva 66UN 1L"}, {"sku": "4.49511E+18", "nombre": "En Powerade Manzana 30UN 1L"}, {"sku": "1.29432E+18", "nombre": "En Fuze Tea Limón 6UN 1L & Monster 1UN 473ML & Monster Zero 1UN 473ML"}, {"sku": "6.73116E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "4.50879E+16", "nombre": "Promo 17%: Leche Saborizada (16 Chocolate+1 Leche Canela) 1Lt."}, {"sku": "5.5524E+18", "nombre": "Topo Chico Sangría Light"}, {"sku": "6.07575E+18", "nombre": "En Coca Cola Original 9UN 2L & Monster Ultraparidese 1UN 473ML"}, {"sku": "8.42327E+18", "nombre": "Fanta Uva"}, {"sku": "4.30352E+18", "nombre": "Joya Piña"}, {"sku": "9.18664E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.19828E+18", "nombre": "En Coca Cola Original 6UN 1.35L"}, {"sku": "1.30402E+18", "nombre": "En Fuze Tea Limón 4UN 1L"}, {"sku": "8.49694E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "5.01615E+18", "nombre": "Familia Coca - Cola"}, {"sku": "4.64214E+18", "nombre": "Promo 20%: Leche Saborizada 36 Chocolate Gratis 9 Frutilla 200Ml."}, {"sku": "3.92083E+18", "nombre": "Coca - Cola Zero"}, {"sku": "5.54362E+18", "nombre": "En Coca Cola Original 60UN 300ML"}, {"sku": "7.99757E+18", "nombre": "Coca - Cola Café Caramelo"}, {"sku": "8.03207E+18", "nombre": "En Powerade Mora 30UN 1L"}, {"sku": "1.81304E+18", "nombre": "Fanta Naranja"}, {"sku": "4.64915E+18", "nombre": "Familia Coca - Cola"}, {"sku": "4.71448E+18", "nombre": "CHOCOLATE M&MS MILK 37.8G / 6 PZ DISPLAY"}, {"sku": "3.97626E+18", "nombre": "CHOCOLATE M&MS PEANUT 37.5 / 6 PZ / DISPLAY"}, {"sku": "7.98285E+18", "nombre": "Del Valle Uva"}, {"sku": "5.53055E+17", "nombre": "Joya Durazno"}, {"sku": "9.15294E+18", "nombre": "Coca - Cola Light"}, {"sku": "8.01416E+18", "nombre": "Joya"}, {"sku": "1.09627E+18", "nombre": "En Powerade Mora 6UN 600ML"}, {"sku": "9.06675E+17", "nombre": "Promo 20%: Leche Saborizada (11 Frutilla+9 Chocolate) 200Ml."}, {"sku": "7.72996E+18", "nombre": "Ciel Agua Purificada"}, {"sku": "7.86396E+18", "nombre": "Inca Kola"}, {"sku": "8.33242E+18", "nombre": "Fanta Naranja"}, {"sku": "1.68658E+18", "nombre": "Fanta Naranja"}, {"sku": "4.64018E+18", "nombre": "En Powerade Maracuyá 9UN 1L"}, {"sku": "5.12097E+18", "nombre": "En Powerade Frutas 9UN 1L"}, {"sku": "3.51245E+18", "nombre": "En Powerade Uva 9UN 1L"}, {"sku": "1.10753E+18", "nombre": "Coca - Cola Zero"}, {"sku": "7.50985E+18", "nombre": "Coca - Cola Light"}, {"sku": "4.43416E+18", "nombre": "En Coca Cola Original 12UN 1L & Monster Ultraparidese 1UN 473ML"}, {"sku": "9.02584E+18", "nombre": "Coca - Cola Life"}, {"sku": "8.9013E+18", "nombre": "Inca-Kola"}, {"sku": "2.71671E+18", "nombre": "Coca-Cola SO"}, {"sku": "7.73449E+18", "nombre": "Inca Kola"}, {"sku": "8.33378E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "2.6192E+18", "nombre": "Fanta Piña"}, {"sku": "6.256E+18", "nombre": "Fresca Toronja"}, {"sku": "5.90665E+18", "nombre": "Fanta Fresa"}, {"sku": "9.10702E+18", "nombre": "Promo 33%: 5 Leches Saborizadas Chocolate 250Ml."}, {"sku": "7.65095E+18", "nombre": "Fresca Toronja"}, {"sku": "6.63619E+18", "nombre": "Fanta Naranja"}, {"sku": "1.79362E+18", "nombre": "Sprite Lima Limón"}, {"sku": "1.31311E+18", "nombre": "Promo 20%: 39 Leche Saborizada Chocolate 200Ml."}, {"sku": "7.90069E+18", "nombre": "Coca - Cola"}, {"sku": "5.95624E+18", "nombre": "En Powerade Mora 21UN 1L"}, {"sku": "3.72236E+18", "nombre": "En Powerade Frutas 60UN 600ML"}, {"sku": "4.53273E+18", "nombre": "En Powerade Manzana 60UN 350ML"}, {"sku": "3.83503E+18", "nombre": "En Powerade Uva 21UN 1L"}, {"sku": "8.06068E+18", "nombre": "Sprite Lima-Limón"}, {"sku": "3.43914E+18", "nombre": "Fanta Uva"}, {"sku": "5.47881E+18", "nombre": "Del Valle Reserva Granada"}, {"sku": "6.7042E+18", "nombre": "En Coca Cola Original 12UN 300ML & Fanta Naranja 4UN 300ML & Fioravanti Fresa 4UN 300ML & Sprite 4UN 300ML"}, {"sku": "4.36295E+18", "nombre": "Promo 20%: Leche Saborizada (10 Frutilla+10 Chocolate) 200Ml."}, {"sku": "7.50688E+18", "nombre": "Del Valle Reserva Acaí"}, {"sku": "7.63442E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "2.27741E+18", "nombre": "Del Valle Surtida"}, {"sku": "4.40719E+18", "nombre": "En Monster 1UN 473ML & Monster Ultra Zero 1UN 473ML & Monster Ultraparidese 1UN 473ML"}, {"sku": "3.36174E+18", "nombre": "Fuze Tea Negro Limón"}, {"sku": "6.18129E+18", "nombre": "Del Valle Néctar Durazno"}, {"sku": "7.58151E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "6.48087E+18", "nombre": "Sprite Lima Limón"}, {"sku": "7.74378E+18", "nombre": "Sprite FNX Lima Limón"}, {"sku": "7.21199E+18", "nombre": "Dasani Saborizada Limón Con Gas"}, {"sku": "7.81128E+18", "nombre": "Dasani Saborizada Manzana Con Gas"}, {"sku": "8.11422E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "8.59823E+18", "nombre": "Familia Coca - Cola"}, {"sku": "6.52499E+18", "nombre": "Ciel Saborizada Jamaica"}, {"sku": "2.46227E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "1.30882E+18", "nombre": "Joya Ponche"}, {"sku": "3.36262E+18", "nombre": "Joya Manzana"}, {"sku": "2.85956E+18", "nombre": "Coca-Cola E"}, {"sku": "7.56614E+18", "nombre": "Santa Clara Leche Entera"}, {"sku": "5.47984E+18", "nombre": "Joya Durazno"}, {"sku": "1.16986E+17", "nombre": "Familia Coca - Cola"}, {"sku": "1.60049E+18", "nombre": "Familia Coca - Cola"}, {"sku": "5.0455E+18", "nombre": "Coca - Cola Zero"}, {"sku": "3.8168E+18", "nombre": "En Dasani (16UN 600ML - 36UN 1.2L) & Powerade Frutas 6UN 1L & Powerade Manzana 6UN 1L & Powerade Mora 6UN 1L"}, {"sku": "5.12842E+18", "nombre": "En Powerade Frutas 60UN 350ML"}, {"sku": "1.76968E+17", "nombre": "En Powerade Mora 60UN 350ML"}, {"sku": "2.1834E+18", "nombre": "Dasani Sin Gas"}, {"sku": "5.14504E+18", "nombre": "Sprite Zero Lima Limón"}, {"sku": "4.67461E+18", "nombre": "Fanta Uva"}, {"sku": "5.75923E+18", "nombre": "Sprite FNX Lima Limón"}, {"sku": "7.73E+17", "nombre": "Coca - Cola"}, {"sku": "9.90531E+17", "nombre": "En Powerade Uva 18UN 1L"}, {"sku": "2.70871E+18", "nombre": "AdeS Natural"}, {"sku": "7.56552E+18", "nombre": "Dual Pack Coca Cola + Fanta Naranja"}, {"sku": "1.99962E+18", "nombre": "En Inca Kola 36UN 900ML"}, {"sku": "3.18701E+18", "nombre": "En Powerade Maracuyá 3UN 1L"}, {"sku": "2.52991E+18", "nombre": "En Powerade Mora 12UN 600ML"}, {"sku": "8.80593E+18", "nombre": "En Powerade Manzana 12UN 600ML"}, {"sku": "1.46187E+17", "nombre": "En Powerade Manzana 6UN 600ML"}, {"sku": "1.15322E+18", "nombre": "En Powerade Frutas 12UN 600ML"}, {"sku": "3.78042E+18", "nombre": "Sidral Mundet Manzana"}, {"sku": "3.27429E+18", "nombre": "En Monster Mango Loco 24UN 473ML"}, {"sku": "8.73595E+18", "nombre": "En Monster Ultraparidese 24UN 473ML"}, {"sku": "2.71078E+18", "nombre": "En Monster Zero 24UN 473ML"}, {"sku": "5.17464E+18", "nombre": "Coca - Cola Light"}, {"sku": "6.83688E+18", "nombre": "Familia Coca - Cola"}, {"sku": "6.14533E+18", "nombre": "En Dasani 24UN 300ML & Fuze Tea Limón 24UN 300ML"}, {"sku": "1.6854E+18", "nombre": "Joya"}, {"sku": "7.02613E+18", "nombre": "Kinder Joy Chocolate Display 12 x 20Gr"}, {"sku": "4.79634E+18", "nombre": "Joya Toronja"}, {"sku": "9.67261E+17", "nombre": "Fuze Tea Durazno"}, {"sku": "5.3702E+18", "nombre": "Familia Coca-Cola Multipack"}, {"sku": "4.74739E+18", "nombre": "5+1 Tachos (Pistacho+Manjar+Coco+Ron Pasas Frutilla+ Galleta) Gratis Triple Chocolate"}, {"sku": "7.63558E+15", "nombre": "Fanta Mandarina"}, {"sku": "8.35525E+18", "nombre": "Manzana Lift Manzana"}, {"sku": "2.76368E+17", "nombre": "Monster Energy Mango Loco"}, {"sku": "8.65639E+18", "nombre": "Del Valle Néctar Durazno"}, {"sku": "2.45734E+17", "nombre": "Coca-Cola Sabor Original"}, {"sku": "5.37092E+18", "nombre": "En Coca Cola Original 12UN 1.25L & Monster 1UN 473ML"}, {"sku": "2.1322E+18", "nombre": "En Powerade Uva 30UN 1L"}, {"sku": "7.42168E+18", "nombre": "Fresca Toronja"}, {"sku": "5.27102E+18", "nombre": "Del Valle Manzana"}, {"sku": "4.81666E+18", "nombre": "En Coca Cola Original 9UN 2L & Monster 1UN 473ML & Monster Ultraparidese 1UN 473ML"}, {"sku": "6.13649E+17", "nombre": "Topo Chico Agua Mineral"}, {"sku": "9.9659E+17", "nombre": "Fresca Toronja Rosa"}, {"sku": "4.03985E+17", "nombre": "Familia Coca - Cola"}, {"sku": "1.63937E+18", "nombre": "Joya Uva"}, {"sku": "1.50782E+18", "nombre": "Promo 20%: Leche Saborizada (10 Frutilla+ 12 Chocolate) 200Ml."}, {"sku": "5.3508E+18", "nombre": "Ciel Exprim Gasificada Maracuya"}, {"sku": "7.20827E+18", "nombre": "En Powerade Manzana (6UN 350ML - 3UN 1L)"}, {"sku": "6.0591E+18", "nombre": "Powerade"}, {"sku": "8.24575E+18", "nombre": "Fanta Limón"}, {"sku": "3.71136E+18", "nombre": "Powerade Moras"}, {"sku": "1.0899E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "2.04023E+18", "nombre": "Familia Coca - Cola"}, {"sku": "6.38654E+18", "nombre": "Coca-Cola Sabor Original"}, {"sku": "8.23694E+18", "nombre": "Promo 16%: Leche Saborizada (5 Frutilla+5 Chocolate) 200Ml."}, {"sku": "9.13635E+18", "nombre": "En Powerade Maracuyá 30UN 1L"}, {"sku": "3.56202E+18", "nombre": "Valle Frut Mandarina"}, {"sku": "5.40728E+18", "nombre": "Del Valle y Nada Limón"}, {"sku": "7.4698E+18", "nombre": "Fanta Naranja"}, {"sku": "2.38642E+17", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "9.0992E+18", "nombre": "Fanta Manzana"}, {"sku": "1.15376E+18", "nombre": "Fanta Fresa"}, {"sku": "1.08163E+18", "nombre": "En Dasani (6UN 500ML - 6UN 500ML - 60UN 1.2L)"}, {"sku": "5.1919E+18", "nombre": "En Coca Cola Original 10UN 1.25L & Monster 1UN 473ML"}, {"sku": "8.27958E+17", "nombre": "Coca-Cola"}, {"sku": "1.82427E+18", "nombre": "En Powerade Maracuyá 6UN 1L & Powerade Mora 6UN 350ML"}, {"sku": "7.79255E+18", "nombre": "Fanta Uva"}, {"sku": "3.81583E+18", "nombre": "Fioravanti Fresa"}, {"sku": "7.19212E+18", "nombre": "Familia Monster Paquete Surtido"}, {"sku": "3.57746E+18", "nombre": "Del Valle Surtida"}, {"sku": "8.78848E+18", "nombre": "En Powerade Frutas 6UN 350ML & Powerade Manzana 3UN 1L"}, {"sku": "4.00542E+18", "nombre": "En Del Valle Manzana 18UN 950ML & Del Valle Naranja 18UN 950ML"}, {"sku": "8.49273E+18", "nombre": "Monster Energy Original"}, {"sku": "5.67493E+18", "nombre": "Ciel Mineralizada Agua Mineral"}, {"sku": "6.9783E+18", "nombre": "Ades Frutal Naranja"}, {"sku": "1.69513E+18", "nombre": "Coca-Cola Original Paquete Surtido"}, {"sku": "1.33045E+18", "nombre": "Familia Coca - Cola"}, {"sku": "3.17941E+18", "nombre": "Monster Energy Water Melon"}, {"sku": "2.37518E+18", "nombre": "Familia Coca - Cola"}, {"sku": "5.60873E+18", "nombre": "Sprite Zero Lima Limón"}, {"sku": "4.42011E+18", "nombre": "Familia Coca-Cola Paquete Surtido"}, {"sku": "8.01892E+18", "nombre": "Santa Clara Leche Deslactosada Semi"}];
+
+// ── STATE ──
+let allProducts = PRODUCTOS;
+let cart = {};
+let activeCategory = 'Todos';
+let pedidos = [];
+
+// ── EMOJI MAP ──
+function getEmoji(nombre) {
+  const n = nombre.toLowerCase();
+  if (/coca|cola|sprite|fanta|crush|sidral|mundet|aquarius|fresca|lift/.test(n)) return '🥤';
+  if (/agua|dasani|topo chico/.test(n)) return '💧';
+  if (/del valle|jugo|cepita|fuze|powerade|vitamin/.test(n)) return '🍹';
+  if (/monster|energy/.test(n)) return '⚡';
+  if (/yogurt|leche|avena|ades|toni|frush|lacteo/.test(n)) return '🥛';
+  if (/galleta|cereal|zucaritas|kellogg|choco|vuala|bony/.test(n)) return '🍪';
+  if (/arroz|pasta|sopa|fideo|maruchan/.test(n)) return '🍜';
+  if (/atun|atún|sardina|ensalada/.test(n)) return '🥫';
+  if (/aceite|vinagre|aderezo|salsa|knorr|consome/.test(n)) return '🧂';
+  if (/azucar|azúcar|cafe|café|maizena|atole/.test(n)) return '☕';
+  if (/chicharron|tostitos|tortolines|topitos|cuates|chifle/.test(n)) return '🍿';
+  if (/cerveza|tecate|carta blanca|modelo|bacardi|whisky/.test(n)) return '🍺';
+  if (/shampoo|crema|toalla|suavizante|cloralex|dental|jabón/.test(n)) return '🧴';
+  if (/gelatina/.test(n)) return '🍮';
+  if (/chocolate|snickers/.test(n)) return '🍫';
+  if (/pan|bimbo/.test(n)) return '🍞';
+  if (/telefon|tarjeta|paquete|prepago|movistar|claro/.test(n)) return '📱';
+  return '📦';
+}
+
+function getCategory(nombre) {
+  const n = nombre.toLowerCase();
+  if (/coca|cola|fanta|sprite|fresca|lift|crush|sidral|mundet/.test(n)) return 'Coca-Cola';
+  if (/del valle|jugo|cepita/.test(n)) return 'Del Valle';
+  if (/agua|dasani|topo chico/.test(n)) return 'Agua';
+  if (/fuze|powerade|aquarius|monster|energy|vitamin/.test(n)) return 'Bebidas';
+  if (/yogurt|leche|avena|ades|toni|lacteo/.test(n)) return 'Lácteos';
+  if (/galleta|cereal|kellogg|zucaritas/.test(n)) return 'Cereales';
+  if (/arroz|fideo|sopa|pasta|maruchan/.test(n)) return 'Abarrotes';
+  if (/atun|atún|sardina/.test(n)) return 'Conservas';
+  if (/aceite|salsa|aderezo|knorr|consome/.test(n)) return 'Condimentos';
+  if (/chicharron|tostitos|tortolines|topitos/.test(n)) return 'Botanas';
+  if (/gelatina|chocolate|pan|bimbo|galleta/.test(n)) return 'Dulcería';
+  if (/cerveza|tecate|modelo|bacardi|whisky/.test(n)) return 'Bebidas Alc.';
+  if (/shampoo|crema|toalla|suavizante|cloralex|dental/.test(n)) return 'Cuidado Personal';
+  if (/telefon|tarjeta|paquete|prepago/.test(n)) return 'Telefonía';
+  return 'Otros';
+}
+
+// ── INIT ──
+function init() {
+  document.getElementById('headerDate').textContent = new Date().toLocaleDateString('es-MX', {weekday:'short', year:'numeric', month:'short', day:'numeric'});
+  buildPills();
+  renderProducts();
+}
+
+function buildPills() {
+  const cats = ['Todos', ...new Set(allProducts.map(p => getCategory(p.nombre)).sort())];
+  document.getElementById('pillsContainer').innerHTML = cats.map(c =>
+    '<button class="pill ' + (c === activeCategory ? 'active' : '') + '" onclick="setCategory(\'' + c.replace(/'/g, "\\'") + '\')">' + c + '</button>'
+  ).join('');
+}
+
+function setCategory(cat) {
+  activeCategory = cat;
+  buildPills();
+  renderProducts();
+}
+
+function renderProducts() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const grid = document.getElementById('productGrid');
+  let filtered = allProducts.filter(function(p) {
+    const matchQ = !q || p.nombre.toLowerCase().includes(q);
+    const matchC = activeCategory === 'Todos' || getCategory(p.nombre) === activeCategory;
+    return matchQ && matchC;
+  }).slice(0, 200);
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:56px;color:var(--text3)">Sin resultados para esta búsqueda.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(function(p, i) {
+    const inCart = !!cart[p.sku];
+    const qty = cart[p.sku] ? cart[p.sku].cantidad : 0;
+    return '<div class="product-card ' + (inCart ? 'in-cart' : '') + '" style="animation-delay:' + (i * 0.015) + 's">' +
+      '<div style="display:flex;align-items:center;gap:10px">' +
+        '<div class="product-icon">' + getEmoji(p.nombre) + '</div>' +
+        '<div style="flex:1;min-width:0">' +
+          '<div class="product-name">' + escHtml(p.nombre) + '</div>' +
+          '<div class="product-sku">SKU ' + String(p.sku).substring(0, 12) + '…</div>' +
+        '</div>' +
+      '</div>' +
+      '<button class="add-btn ' + (inCart ? 'added' : '') + '" onclick="addToCart(\'' + escAttr(p.sku) + '\', \'' + escAttr(p.nombre) + '\')">' +
+        (inCart ? '✓ En carrito (' + qty + ')' : '+ Agregar') +
+      '</button>' +
+    '</div>';
+  }).join('');
+}
+
+// ── CART ──
+function addToCart(sku, nombre) {
+  if (cart[sku]) {
+    cart[sku].cantidad += 1;
+  } else {
+    cart[sku] = { nombre: nombre, cantidad: 1 };
+  }
+  updateCartUI();
+  renderProducts();
+}
+
+function changeQty(sku, delta) {
+  if (!cart[sku]) return;
+  cart[sku].cantidad += delta;
+  if (cart[sku].cantidad <= 0) delete cart[sku];
+  updateCartUI();
+  renderProducts();
+}
+
+function removeItem(sku) {
+  delete cart[sku];
+  updateCartUI();
+  renderProducts();
+}
+
+function updateCartUI() {
+  const items = Object.entries(cart);
+  const totalProd = items.length;
+  const totalUnd = items.reduce(function(s, kv) { return s + kv[1].cantidad; }, 0);
+
+  document.getElementById('cartCountHeader').textContent = totalProd;
+  document.getElementById('cartBadge').textContent = totalProd + ' producto' + (totalProd !== 1 ? 's' : '');
+  document.getElementById('sumProductos').textContent = totalProd;
+  document.getElementById('sumUnidades').textContent = totalUnd;
+  document.getElementById('sumLineas').textContent = totalProd;
+  document.getElementById('confirmBtn').disabled = totalProd === 0;
+
+  const pedidosBadge = document.getElementById('pedidosBadge');
+  if (pedidos.length > 0) {
+    pedidosBadge.textContent = pedidos.length;
+    pedidosBadge.classList.add('show');
+  }
+
+  const cartItemsEl = document.getElementById('cartItems');
+  if (items.length === 0) {
+    cartItemsEl.innerHTML = '<div class="cart-empty"><div class="empty-icon">📦</div>Agrega productos al pedido</div>';
+    return;
+  }
+
+  cartItemsEl.innerHTML = items.map(function(kv) {
+    const sku = kv[0], v = kv[1];
+    return '<div class="cart-item">' +
+      '<div class="ci-name">' + escHtml(v.nombre) + '</div>' +
+      '<div class="ci-qty">' +
+        '<button class="qty-btn" onclick="changeQty(\'' + escAttr(sku) + '\', -1)">−</button>' +
+        '<span class="qty-num">' + v.cantidad + '</span>' +
+        '<button class="qty-btn" onclick="changeQty(\'' + escAttr(sku) + '\', 1)">+</button>' +
+      '</div>' +
+      '<button class="remove-btn" onclick="removeItem(\'' + escAttr(sku) + '\')" title="Eliminar">✕</button>' +
+    '</div>';
+  }).join('');
+}
+
+// ── TABS ──
+function switchTab(tab) {
+  if (tab === 'catalogo') {
+    document.getElementById('catalogView').classList.remove('hidden');
+    document.getElementById('pedidosView').classList.remove('active');
+    document.getElementById('tabCatalogo').classList.add('active');
+    document.getElementById('tabPedidos').classList.remove('active');
+  } else {
+    document.getElementById('catalogView').classList.add('hidden');
+    document.getElementById('pedidosView').classList.add('active');
+    document.getElementById('tabPedidos').classList.add('active');
+    document.getElementById('tabCatalogo').classList.remove('active');
+    renderPedidos();
+  }
+}
+
+function scrollToCart() {
+  document.getElementById('cartPanel').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── ORDER FORM ──
+function confirmarPedido() {
+  if (Object.keys(cart).length === 0) return;
+  document.getElementById('datosOverlay').classList.add('show');
+}
+
+function closeDatos() {
+  document.getElementById('datosOverlay').classList.remove('show');
+}
+
+function enviarPedido() {
+  const nombre = document.getElementById('dNombre').value.trim();
+  const correo = document.getElementById('dCorreo').value.trim();
+  const telefono = document.getElementById('dTelefono').value.trim();
+  const cp = document.getElementById('dCP').value.trim();
+  const direccion = document.getElementById('dDireccion').value.trim();
+  const cliente = document.getElementById('clienteInput').value.trim() || 'Sin nombre';
+
+  // Validate
+  var valid = true;
+  ['dNombre','dCorreo','dTelefono','dDireccion'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el.value.trim()) { el.classList.add('error'); valid = false; }
+    else el.classList.remove('error');
+  });
+  if (!valid) { alert('Por favor completa los campos obligatorios.'); return; }
+
+  const idPedido = 'PED-' + Date.now();
+  const now = new Date();
+  const fechaStr = now.toLocaleString('es-MX');
+
+  const items = Object.entries(cart).map(function(kv, idx) {
+    return { id_linea: idx + 1, sku: kv[0], nombre: kv[1].nombre, cantidad: kv[1].cantidad };
+  });
+
+  const pedido = {
+    id: idPedido, fecha: fechaStr, cliente: cliente,
+    nombre: nombre, correo: correo, telefono: telefono,
+    cp: cp, direccion: direccion, items: items,
+    totalProductos: items.length,
+    totalUnidades: items.reduce(function(s, i) { return s + i.cantidad; }, 0)
+  };
+
+  // ── Guardar en CSV via Flask ──
+  var btnConfirm = document.querySelector('.datos-submit');
+  if (btnConfirm) { btnConfirm.disabled = true; btnConfirm.textContent = 'Guardando...'; }
+
+  fetch('/api/pedido', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
+    body: JSON.stringify({
+      cliente: cliente,
+      contacto: nombre,
+      correo: correo,
+      telefono: telefono,
+      cp: cp,
+      direccion: direccion,
+      items: items.map(function(it) { return { sku: it.sku, nombre: it.nombre, cantidad: it.cantidad }; })
+    })
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    if (!data.success) throw new Error(data.error || 'Error desconocido');
+    mostrarConfirmacion(pedido, data.id_pedido, fechaStr, items);
+  })
+  .catch(function(err) {
+    // Si no hay servidor Flask, igual mostramos confirmación (modo offline)
+    console.warn('Flask no disponible, guardando solo en memoria:', err.message);
+    mostrarConfirmacion(pedido, idPedido, fechaStr, items);
+  })
+  .finally(function() {
+    if (btnConfirm) { btnConfirm.disabled = false; btnConfirm.textContent = '✦ Confirmar Pedido'; }
+  });
+}
+
+function mostrarConfirmacion(pedido, idPedido, fechaStr, items) {
+  pedidos.unshift(pedido);
+
+  // Update badge
+  var badge = document.getElementById('pedidosBadge');
+  badge.textContent = pedidos.length;
+  badge.classList.add('show');
+
+  // Show modal
+  document.getElementById('modalPedidoId').textContent = idPedido;
+  document.getElementById('modalDatetime').textContent = fechaStr;
+  document.getElementById('resumenTabla').innerHTML = items.map(function(it) {
+    return '<tr><td>' + it.id_linea + '</td><td style="font-family:monospace;font-size:11px">' + escHtml(String(it.sku).substring(0,12)) + '…</td><td>' + escHtml(it.nombre) + '</td><td style="text-align:center;font-weight:800;color:var(--blue)">' + it.cantidad + '</td></tr>';
+  }).join('');
+  document.getElementById('resumenComprador').innerHTML =
+    '<div><span style="color:var(--text3)">Nombre:</span> <strong>' + escHtml(pedido.nombre) + '</strong></div>' +
+    '<div><span style="color:var(--text3)">Correo:</span> ' + escHtml(pedido.correo) + '</div>' +
+    '<div><span style="color:var(--text3)">Teléfono:</span> ' + escHtml(pedido.telefono) + '</div>';
+  document.getElementById('resumenEnvio').innerHTML =
+    '<div><span style="color:var(--text3)">Cliente:</span> <strong>' + escHtml(pedido.cliente) + '</strong></div>' +
+    '<div><span style="color:var(--text3)">Dirección:</span> ' + escHtml(pedido.direccion) + '</div>' +
+    (pedido.cp ? '<div><span style="color:var(--text3)">C.P.:</span> ' + escHtml(pedido.cp) + '</div>' : '');
+
+  closeDatos();
+  document.getElementById('modalOverlay').classList.add('show');
+
+  // Clear cart
+  cart = {};
+  updateCartUI();
+  renderProducts();
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+// ── PEDIDOS VIEW ──
+function renderPedidos() {
+  const q = (document.getElementById('pedidosSearch').value || '').toLowerCase();
+  const list = document.getElementById('pedidosList');
+  document.getElementById('pedidosCount').textContent = pedidos.length + ' pedidos';
+
+  var filtered = pedidos.filter(function(p) {
+    if (!q) return true;
+    return p.id.toLowerCase().includes(q) ||
+           p.nombre.toLowerCase().includes(q) ||
+           p.cliente.toLowerCase().includes(q) ||
+           p.items.some(function(i) { return i.nombre.toLowerCase().includes(q); });
+  });
+
+  if (!filtered.length) {
+    list.innerHTML = '<div class="empty-pedidos"><div class="empty-pedidos-icon">📋</div><h3>Sin pedidos aún</h3><p>Los pedidos confirmados aparecerán aquí</p></div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(function(p, idx) {
+    return '<div class="pedido-card" id="pcard-' + idx + '">' +
+      '<div class="pedido-card-header" onclick="togglePedido(' + idx + ')">' +
+        '<div class="pedido-status-dot"></div>' +
+        '<div class="pedido-id-badge">' + escHtml(p.id) + '</div>' +
+        '<div class="pedido-meta">' +
+          '<div class="pedido-meta-nombre">' + escHtml(p.cliente) + ' — ' + escHtml(p.nombre) + '</div>' +
+          '<div class="pedido-meta-sub">' + escHtml(p.fecha) + '</div>' +
+        '</div>' +
+        '<div class="pedido-chips">' +
+          '<span class="pedido-chip">' + p.totalProductos + ' productos</span>' +
+          '<span class="pedido-chip">' + p.totalUnidades + ' uds.</span>' +
+          '<span class="pedido-chip green">● Registrado</span>' +
+        '</div>' +
+        '<span class="pedido-expand-arrow">▼</span>' +
+      '</div>' +
+      '<div class="pedido-card-body">' +
+        '<div class="pedido-section-title">🛒 Productos</div>' +
+        '<table class="pedido-table"><thead><tr><th>#</th><th>SKU</th><th>Producto</th><th>Cant.</th></tr></thead><tbody>' +
+        p.items.map(function(it) {
+          return '<tr><td>' + it.id_linea + '</td><td style="font-family:monospace;font-size:11px">' + escHtml(String(it.sku).substring(0,12)) + '…</td><td>' + escHtml(it.nombre) + '</td><td style="font-weight:800;color:var(--blue);text-align:center">' + it.cantidad + '</td></tr>';
+        }).join('') +
+        '</tbody></table>' +
+        '<div class="pedido-info-grid">' +
+          '<div class="pedido-info-box">' +
+            '<div class="pedido-section-title">👤 Comprador</div>' +
+            '<div class="pedido-info-row"><span class="pedido-info-label">Nombre:</span><span class="pedido-info-val">' + escHtml(p.nombre) + '</span></div>' +
+            '<div class="pedido-info-row"><span class="pedido-info-label">Correo:</span><span class="pedido-info-val">' + escHtml(p.correo) + '</span></div>' +
+            '<div class="pedido-info-row"><span class="pedido-info-label">Tel:</span><span class="pedido-info-val">' + escHtml(p.telefono) + '</span></div>' +
+          '</div>' +
+          '<div class="pedido-info-box">' +
+            '<div class="pedido-section-title">📦 Envío</div>' +
+            '<div class="pedido-info-row"><span class="pedido-info-label">Cliente:</span><span class="pedido-info-val">' + escHtml(p.cliente) + '</span></div>' +
+            '<div class="pedido-info-row"><span class="pedido-info-label">Dirección:</span><span class="pedido-info-val">' + escHtml(p.direccion) + '</span></div>' +
+            (p.cp ? '<div class="pedido-info-row"><span class="pedido-info-label">C.P.:</span><span class="pedido-info-val">' + escHtml(p.cp) + '</span></div>' : '') +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function togglePedido(idx) {
+  var card = document.getElementById('pcard-' + idx);
+  if (card) card.classList.toggle('expanded');
+}
+
+// ── UTILS ──
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(s) {
+  return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+}
+
+// ── START ──
+init();
+</script>
+</body>
+</html>
